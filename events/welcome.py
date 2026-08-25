@@ -1,6 +1,9 @@
 import aiohttp
 import io
+import json
 import os
+from datetime import datetime, timezone
+from pathlib import Path
 
 import discord
 from discord.ext import commands
@@ -19,6 +22,20 @@ WELCOME_CHANNEL_ID = 1540758633216872468
 
 # Rol que es dona automàticament
 WELCOME_ROLE_ID = 1540758763307274289
+
+
+# ============================================================
+# ESTAT DEL WELCOME
+# ============================================================
+
+# Guardem aquí l'última vegada que el bot va comprovar
+# els membres del servidor.
+
+WELCOME_STATE_FILE = (
+    Path(__file__).parent.parent
+    / "database"
+    / "welcome_state.json"
+)
 
 
 # ============================================================
@@ -109,6 +126,66 @@ FONT_PATH = None
 WELCOME_MESSAGE = (
     "Hola {member}, benvingut a **{server}**!"
 )
+
+
+# ============================================================
+# ESTAT
+# ============================================================
+
+def load_welcome_state():
+
+    # Si no existeix el fitxer, retornem un diccionari buit.
+
+    if not WELCOME_STATE_FILE.exists():
+
+        return {}
+
+    try:
+
+        with open(
+            WELCOME_STATE_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            return json.load(file)
+
+    except Exception as error:
+
+        print(
+            f"❌ Error carregant l'estat del welcome: "
+            f"{error}"
+        )
+
+        return {}
+
+
+def save_welcome_state(state):
+
+    try:
+
+        WELCOME_STATE_FILE.parent.mkdir(
+            exist_ok=True
+        )
+
+        with open(
+            WELCOME_STATE_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                state,
+                file,
+                indent=4
+            )
+
+    except Exception as error:
+
+        print(
+            f"❌ Error guardant l'estat del welcome: "
+            f"{error}"
+        )
 
 
 # ============================================================
@@ -382,20 +459,25 @@ class Welcome(commands.Cog):
 
         self.bot = bot
 
+        # Estat persistent
+        self.welcome_state = load_welcome_state()
+
 
     # ========================================================
-    # MEMBER JOIN
+    # ENVIAR WELCOME
     # ========================================================
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def send_welcome(
+        self,
+        member
+    ):
 
         # ----------------------------------------------------
         # SISTEMA ACTIVAT?
         # ----------------------------------------------------
 
         if not WELCOME_ENABLED:
-            return
+            return False
 
 
         # ====================================================
@@ -417,15 +499,19 @@ class Welcome(commands.Cog):
 
             try:
 
-                await member.add_roles(
-                    role,
-                    reason="Rol automàtic de benvinguda"
-                )
+                # Només el donem si encara no el té.
 
-                print(
-                    f"🎭 Rol {role.name} donat a "
-                    f"{member}"
-                )
+                if role not in member.roles:
+
+                    await member.add_roles(
+                        role,
+                        reason="Rol automàtic de benvinguda"
+                    )
+
+                    print(
+                        f"🎭 Rol {role.name} donat a "
+                        f"{member}"
+                    )
 
             except discord.Forbidden:
 
@@ -461,7 +547,7 @@ class Welcome(commands.Cog):
                 f"{WELCOME_CHANNEL_ID}"
             )
 
-            return
+            return False
 
 
         # ====================================================
@@ -492,7 +578,7 @@ class Welcome(commands.Cog):
                             "l'avatar."
                         )
 
-                        return
+                        return False
 
                     avatar_bytes = await response.read()
 
@@ -503,7 +589,7 @@ class Welcome(commands.Cog):
                 f"{error}"
             )
 
-            return
+            return False
 
 
         # ====================================================
@@ -525,7 +611,7 @@ class Welcome(commands.Cog):
                 f"{error}"
             )
 
-            return
+            return False
 
 
         # ====================================================
@@ -558,6 +644,8 @@ class Welcome(commands.Cog):
                 f"👋 Welcome enviat per {member}"
             )
 
+            return True
+
         except discord.Forbidden:
 
             print(
@@ -571,6 +659,279 @@ class Welcome(commands.Cog):
                 f"❌ Error enviant welcome: {error}"
             )
 
+        return False
+
+
+    # ========================================================
+    # COMPROVAR MEMBRES PERDUTS
+    # ========================================================
+
+    async def check_missed_members(
+        self,
+        guild
+    ):
+
+        if not WELCOME_ENABLED:
+            return
+
+
+        # ----------------------------------------------------
+        # Hora actual
+        # ----------------------------------------------------
+
+        now = datetime.now(
+            timezone.utc
+        )
+
+
+        # ----------------------------------------------------
+        # Buscar última comprovació
+        # ----------------------------------------------------
+
+        guild_key = str(
+            guild.id
+        )
+
+        last_check_string = (
+            self.welcome_state.get(
+                guild_key
+            )
+        )
+
+
+        # ----------------------------------------------------
+        # PRIMERA VEGADA
+        # ----------------------------------------------------
+
+        # Si és la primera vegada que utilitzem aquest
+        # sistema, NO donarem welcome a tothom.
+        #
+        # Simplement guardem el moment actual.
+        #
+        # A partir d'aquí, qualsevol membre que entri
+        # mentre el bot estigui apagat serà detectat.
+
+        if last_check_string is None:
+
+            self.welcome_state[
+                guild_key
+            ] = now.isoformat()
+
+            save_welcome_state(
+                self.welcome_state
+            )
+
+            print(
+                f"👋 Welcome: primera comprovació "
+                f"de {guild.name}."
+            )
+
+            return
+
+
+        # ----------------------------------------------------
+        # Convertir la data
+        # ----------------------------------------------------
+
+        try:
+
+            last_check = datetime.fromisoformat(
+                last_check_string
+            )
+
+            if last_check.tzinfo is None:
+
+                last_check = last_check.replace(
+                    tzinfo=timezone.utc
+                )
+
+        except Exception:
+
+            print(
+                f"⚠️ Data de welcome incorrecta "
+                f"per {guild.name}. "
+                f"Reiniciant registre."
+            )
+
+            self.welcome_state[
+                guild_key
+            ] = now.isoformat()
+
+            save_welcome_state(
+                self.welcome_state
+            )
+
+            return
+
+
+        # ----------------------------------------------------
+        # BUSCAR MEMBRES QUE HAN ENTRAT MENTRE EL BOT
+        # ESTAVA APAGAT
+        # ----------------------------------------------------
+
+        missed_members = []
+
+        for member in guild.members:
+
+            # Bots no reben welcome
+
+            if member.bot:
+                continue
+
+            # Si Discord no té registrada la data
+            # d'entrada, no podem comprovar-la.
+
+            if member.joined_at is None:
+                continue
+
+            if member.joined_at > last_check:
+
+                missed_members.append(
+                    member
+                )
+
+
+        # ----------------------------------------------------
+        # ENVIAR WELCOME
+        # ----------------------------------------------------
+
+        if missed_members:
+
+            print(
+                f"👋 He detectat "
+                f"{len(missed_members)} membre(s) "
+                f"que van entrar mentre el bot estava apagat."
+            )
+
+        for member in missed_members:
+
+            print(
+                f"🔎 Welcome perdut detectat: "
+                f"{member}"
+            )
+
+            success = await self.send_welcome(
+                member
+            )
+
+            if success:
+
+                print(
+                    f"✅ Welcome recuperat per "
+                    f"{member}"
+                )
+
+
+        # ----------------------------------------------------
+        # ACTUALITZAR ÚLTIMA COMPROVACIÓ
+        # ----------------------------------------------------
+
+        self.welcome_state[
+            guild_key
+        ] = now.isoformat()
+
+        save_welcome_state(
+            self.welcome_state
+        )
+
+
+    # ========================================================
+    # ON READY
+    # ========================================================
+
+    @commands.Cog.listener()
+    async def on_ready(
+        self
+    ):
+
+        # Evitar executar la comprovació diverses vegades
+        # si Discord reconnecta el bot.
+
+        if getattr(
+            self,
+            "_ready_checked",
+            False
+        ):
+
+            return
+
+        self._ready_checked = True
+
+        print(
+            "👋 Welcome: comprovant membres..."
+        )
+
+        for guild in self.bot.guilds:
+
+            try:
+
+                await self.check_missed_members(
+                    guild
+                )
+
+            except Exception as error:
+
+                print(
+                    f"❌ Error comprovant membres "
+                    f"de {guild.name}: {error}"
+                )
+
+
+    # ========================================================
+    # MEMBER JOIN
+    # ========================================================
+
+    @commands.Cog.listener()
+    async def on_member_join(
+        self,
+        member
+    ):
+
+        # ----------------------------------------------------
+        # SISTEMA ACTIVAT?
+        # ----------------------------------------------------
+
+        if not WELCOME_ENABLED:
+            return
+
+
+        # ----------------------------------------------------
+        # IGNORAR BOTS
+        # ----------------------------------------------------
+
+        if member.bot:
+            return
+
+
+        # ----------------------------------------------------
+        # ENVIAR WELCOME NORMAL
+        # ----------------------------------------------------
+
+        success = await self.send_welcome(
+            member
+        )
+
+        if success:
+
+            # Guardem que aquest membre ja ha rebut
+            # el welcome.
+
+            guild_key = str(
+                member.guild.id
+            )
+
+            now = datetime.now(
+                timezone.utc
+            )
+
+            self.welcome_state[
+                guild_key
+            ] = now.isoformat()
+
+            save_welcome_state(
+                self.welcome_state
+            )
+
 
 # ============================================================
 # SETUP
@@ -579,6 +940,7 @@ class Welcome(commands.Cog):
 async def setup(bot):
 
     # Evitar carregar el sistema de Welcome més d'una vegada
+
     if bot.get_cog("Welcome") is not None:
 
         print(
