@@ -58,6 +58,10 @@ SPAM_MESSAGE_COUNT = 3
 # En cuántos segundos
 SPAM_TIME_WINDOW = 6
 
+# Timeout automàtic per spam
+SPAM_TIMEOUT_ENABLED = True
+SPAM_TIMEOUT_SECONDS = 60
+
 
 # ============================================================
 # ANTI-FLOOD
@@ -578,19 +582,48 @@ class AutoMod(commands.Cog):
         warning_count: int,
         reason: str
     ):
-
         timeout_done = False
         kick_done = False
 
+        # ----------------------------------------------------
+        # TIMEOUT PER SPAM
+        # ----------------------------------------------------
+
+        if reason == "AutoMod: spam" and SPAM_TIMEOUT_ENABLED:
+            try:
+                await member.timeout(
+                    timedelta(
+                        seconds=SPAM_TIMEOUT_SECONDS
+                    ),
+                    reason="AutoMod: spam"
+                )
+
+                timeout_done = True
+
+                print(
+                    f"⏱️ AutoMod: {member} "
+                    f"ha rebut un timeout de "
+                    f"{SPAM_TIMEOUT_SECONDS} segons per spam."
+                )
+
+            except discord.Forbidden:
+                print(
+                    f"❌ No puc aplicar timeout "
+                    f"a {member}."
+                )
+
+            except Exception as error:
+                print(
+                    f"❌ Error aplicant timeout per spam: "
+                    f"{error}"
+                )
 
         # ----------------------------------------------------
-        # TIMEOUT
+        # TIMEOUT PER WARNS
         # ----------------------------------------------------
 
         if warning_count == WARN_TIMEOUT_AT:
-
             try:
-
                 await member.timeout(
                     timedelta(
                         minutes=WARN_TIMEOUT_MINUTES
@@ -599,38 +632,34 @@ class AutoMod(commands.Cog):
                         f"AutoMod: {reason} "
                         f"({warning_count} warns)"
                     )
-                )
+                )   
 
                 timeout_done = True
 
                 print(
                     f"⏱️ AutoMod: {member} "
-                    f"ha recibido timeout."
+                    f"ha rebut timeout per arribar "
+                    f"a {warning_count} warns."
                 )
 
             except discord.Forbidden:
-
                 print(
-                    f"❌ No puedo aplicar timeout "
+                    f"❌ No puc aplicar timeout "
                     f"a {member}."
                 )
 
             except Exception as error:
-
                 print(
-                    f"❌ Error aplicando timeout: "
+                    f"❌ Error aplicant timeout: "
                     f"{error}"
-                )
-
+            )
 
         # ----------------------------------------------------
         # KICK
         # ----------------------------------------------------
 
         if warning_count == WARN_KICK_AT:
-
             try:
-
                 await member.kick(
                     reason=(
                         f"AutoMod: {reason} "
@@ -642,23 +671,20 @@ class AutoMod(commands.Cog):
 
                 print(
                     f"👢 AutoMod: {member} "
-                    f"ha sido expulsado."
+                    f"ha estat expulsat."
                 )
 
             except discord.Forbidden:
-
                 print(
-                    f"❌ No puedo expulsar "
+                    f"❌ No puc expulsar "
                     f"a {member}."
                 )
 
             except Exception as error:
-
                 print(
-                    f"❌ Error expulsando: "
+                    f"❌ Error expulsant: "
                     f"{error}"
                 )
-
 
         return (
             timeout_done,
@@ -691,7 +717,7 @@ class AutoMod(commands.Cog):
                 deleted += 1
 
             except discord.NotFound:
-                # El missatge ja no existeix
+                # Ja s'havia eliminat
                 continue
 
             except discord.Forbidden:
