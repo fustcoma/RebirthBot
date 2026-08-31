@@ -4,14 +4,14 @@ from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 ROLES_ENABLED = True
 
 
 # ============================================================
-# IDS DELS ROLS
+# IDS DE LOS ROLES
 # ============================================================
 
 ROLE_SORTEJOS = 1541002745773957162
@@ -21,7 +21,7 @@ ROLE_APLICACIO = 1541007404588859442
 
 
 # ============================================================
-# VIEW DELS AUTOROLS
+# VIEW DE LOS AUTOROLES
 # ============================================================
 
 class AutoRolesView(discord.ui.View):
@@ -33,11 +33,11 @@ class AutoRolesView(discord.ui.View):
         )
 
     # ========================================================
-    # 🏆 SORTEJOS
+    # 🏆 SORTEOS
     # ========================================================
 
     @discord.ui.button(
-        label="Sortejos",
+        label="Sorteos",
         emoji="🏆",
         style=discord.ButtonStyle.primary,
         custom_id="autorole_sortejos"
@@ -51,15 +51,15 @@ class AutoRolesView(discord.ui.View):
         await self.toggle_role(
             interaction,
             ROLE_SORTEJOS,
-            "sortejos"
+            "sorteos"
         )
 
     # ========================================================
-    # 📅 EVENTS
+    # 📅 EVENTOS
     # ========================================================
 
     @discord.ui.button(
-        label="Events",
+        label="Eventos",
         emoji="📅",
         style=discord.ButtonStyle.primary,
         custom_id="autorole_events"
@@ -73,15 +73,15 @@ class AutoRolesView(discord.ui.View):
         await self.toggle_role(
             interaction,
             ROLE_EVENTS,
-            "els events"
+            "los eventos"
         )
 
     # ========================================================
-    # 🗂️ ACTUALITZACIONS
+    # 🗂️ ACTUALIZACIONES
     # ========================================================
 
     @discord.ui.button(
-        label="Actualitzacions",
+        label="Actualizaciones",
         emoji="🗂️",
         style=discord.ButtonStyle.primary,
         custom_id="autorole_actualitzacions"
@@ -95,15 +95,15 @@ class AutoRolesView(discord.ui.View):
         await self.toggle_role(
             interaction,
             ROLE_ACTUALITZACIONS,
-            "les actualitzacions"
+            "las actualizaciones"
         )
 
     # ========================================================
-    # 💼 APLICACIÓ
+    # 💼 APLICACIÓN
     # ========================================================
 
     @discord.ui.button(
-        label="Aplicació",
+        label="Aplicación",
         emoji="💼",
         style=discord.ButtonStyle.primary,
         custom_id="autorole_aplicacio"
@@ -117,11 +117,11 @@ class AutoRolesView(discord.ui.View):
         await self.toggle_role(
             interaction,
             ROLE_APLICACIO,
-            "les aplicacions"
+            "las aplicaciones"
         )
 
     # ========================================================
-    # DONAR / TREURE ROL
+    # DAR / QUITAR ROL
     # ========================================================
 
     async def toggle_role(
@@ -136,8 +136,8 @@ class AutoRolesView(discord.ui.View):
         if guild is None:
 
             await interaction.response.send_message(
-                "❌ Aquest botó només funciona "
-                "dins d'un servidor.",
+                "❌ Este botón solo funciona "
+                "dentro de un servidor.",
                 ephemeral=True
             )
 
@@ -150,7 +150,7 @@ class AutoRolesView(discord.ui.View):
         if role is None:
 
             await interaction.response.send_message(
-                "❌ No he pogut trobar aquest rol.",
+                "❌ No he podido encontrar este rol.",
                 ephemeral=True
             )
 
@@ -159,7 +159,7 @@ class AutoRolesView(discord.ui.View):
         member = interaction.user
 
         # ====================================================
-        # JA TÉ EL ROL → TREURE
+        # YA TIENE EL ROL → QUITAR
         # ====================================================
 
         if role in member.roles:
@@ -172,7 +172,7 @@ class AutoRolesView(discord.ui.View):
                 )
 
                 await interaction.response.send_message(
-                    f"❌ Ja no rebràs notificacions de "
+                    f"❌ Ya no recibirás notificaciones de "
                     f"**{role_name}**.",
                     ephemeral=True
                 )
@@ -180,16 +180,16 @@ class AutoRolesView(discord.ui.View):
             except discord.Forbidden:
 
                 await interaction.response.send_message(
-                    "❌ No puc treure't aquest rol.\n"
-                    "Comprova que el meu rol estigui "
-                    "per sobre d'aquest rol.",
+                    "❌ No puedo quitarte este rol.\n"
+                    "Comprueba que mi rol esté "
+                    "por encima de este rol.",
                     ephemeral=True
                 )
 
             return
 
         # ====================================================
-        # NO TÉ EL ROL → DONAR
+        # NO TIENE EL ROL → DAR
         # ====================================================
 
         try:
@@ -200,7 +200,7 @@ class AutoRolesView(discord.ui.View):
             )
 
             await interaction.response.send_message(
-                f"✅ Ara rebràs notificacions de "
+                f"✅ ¡Ahora recibirás notificaciones de "
                 f"**{role_name}**!",
                 ephemeral=True
             )
@@ -208,9 +208,9 @@ class AutoRolesView(discord.ui.View):
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No puc donar-te aquest rol.\n"
-                "Comprova que el meu rol estigui "
-                "per sobre d'aquest rol.",
+                "❌ No puedo darte este rol.\n"
+                "Comprueba que mi rol esté "
+                "por encima de este rol.",
                 ephemeral=True
             )
 
@@ -226,7 +226,7 @@ class Roles(commands.Cog):
         self.bot = bot
 
     # ========================================================
-    # CARREGAR VIEW PERSISTENT
+    # CARGAR VIEW PERSISTENTE
     # ========================================================
 
     async def cog_load(self):
@@ -238,7 +238,7 @@ class Roles(commands.Cog):
             )
 
             print(
-                "🎨 Sistema d'autoroles carregat."
+                "🎨 Sistema de autoroles cargado."
             )
 
     # ========================================================
@@ -247,7 +247,7 @@ class Roles(commands.Cog):
 
     @app_commands.command(
         name="roles",
-        description="Publica el menú d'autoroles."
+        description="Publica el menú de autoroles."
     )
     @app_commands.default_permissions(
         administrator=True
@@ -260,21 +260,21 @@ class Roles(commands.Cog):
         if not ROLES_ENABLED:
 
             await interaction.response.send_message(
-                "❌ Els autoroles estan desactivats.",
+                "❌ Los autoroles están desactivados.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # COMPROVAR ADMIN
+        # COMPROBAR ADMIN
         # ----------------------------------------------------
 
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquest comandament.",
+                "❌ Solo los administradores pueden "
+                "utilizar este comando.",
                 ephemeral=True
             )
 
@@ -291,18 +291,18 @@ class Roles(commands.Cog):
         embed.description = (
             "# 🎨 Autoroles\n\n"
 
-            "Personalitza la teva experiència "
-            "i rep informació important "
-            "a l'instant.\n\n"
+            "Personaliza tu experiencia "
+            "y recibe información importante "
+            "al instante.\n\n"
 
-            "Selecciona els rols que vulguis "
-            "tenir fent clic als botons de sota."
+            "Selecciona los roles que quieras "
+            "tener haciendo clic en los botones de abajo."
         )
 
         embed.set_footer(
             text=(
-                "Pots canviar les teves "
-                "preferències en qualsevol moment."
+                "Puedes cambiar tus "
+                "preferencias en cualquier momento."
             )
         )
 

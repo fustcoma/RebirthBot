@@ -9,7 +9,7 @@ from database.database import connect
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 LEVELS_ENABLED = True
@@ -36,7 +36,7 @@ LEVEL_UP_CHANNEL_ID = 1541038984116043877
 
 
 # ============================================================
-# ROLS PER NIVELL
+# ROLES POR NIVEL
 # ============================================================
 
 ROLE_LEVEL_10 = 1541040255539355740
@@ -59,7 +59,7 @@ xp_cooldowns = {}
 
 
 # ============================================================
-# BASE DE DADES
+# BASE DE DATOS
 # ============================================================
 
 def create_levels_table():
@@ -82,7 +82,7 @@ def create_levels_table():
     connection.commit()
 
     # --------------------------------------------------------
-    # COMPATIBILITAT AMB LA TAULA ANTIGA
+    # COMPATIBILIDAD CON LA TABLA ANTIGUA
     # --------------------------------------------------------
 
     cursor.execute(
@@ -108,13 +108,13 @@ def create_levels_table():
             connection.commit()
 
             print(
-                "🔄 Base de dades: columna XP afegida."
+                "🔄 Base de datos: columna XP añadida."
             )
 
         except Exception as error:
 
             print(
-                f"❌ Error actualitzant la base de dades: "
+                f"❌ Error actualizando la base de datos: "
                 f"{error}"
             )
 
@@ -122,7 +122,7 @@ def create_levels_table():
 
 
 # ============================================================
-# XP NECESSÀRIA PER NIVELL
+# XP NECESARIA POR NIVEL
 # ============================================================
 
 def xp_for_level(level: int) -> float:
@@ -137,7 +137,7 @@ def xp_for_level(level: int) -> float:
 
 
 # ============================================================
-# XP TOTAL NECESSÀRIA PER ARRIBAR A UN NIVELL
+# XP TOTAL NECESARIA PARA LLEGAR A UN NIVEL
 # ============================================================
 
 def total_xp_for_level(level: int) -> float:
@@ -157,7 +157,7 @@ def total_xp_for_level(level: int) -> float:
 
 
 # ============================================================
-# CALCULAR NIVELL A PARTIR DE XP
+# CALCULAR NIVEL A PARTIR DE XP
 # ============================================================
 
 def calculate_level(xp: float) -> int:
@@ -182,7 +182,7 @@ def calculate_level(xp: float) -> int:
 
 
 # ============================================================
-# BARRA DE PROGRÉS
+# BARRA DE PROGRESO
 # ============================================================
 
 def progress_bar(
@@ -218,7 +218,7 @@ def progress_bar(
 
 
 # ============================================================
-# ACTUALITZAR ROLS
+# ACTUALIZAR ROLES
 # ============================================================
 
 async def update_level_roles(
@@ -231,7 +231,7 @@ async def update_level_roles(
     if bot_member is None:
 
         print(
-            "❌ No he pogut obtenir el membre del bot."
+            "❌ No he podido obtener el miembro del bot."
         )
 
         return
@@ -248,13 +248,13 @@ async def update_level_roles(
         if role is None:
 
             print(
-                f"❌ No trobo el rol amb ID {role_id}."
+                f"❌ No encuentro el rol con ID {role_id}."
             )
 
             continue
 
         # ----------------------------------------------------
-        # DONAR ROL
+        # DAR ROL
         # ----------------------------------------------------
 
         if level >= required_level:
@@ -265,9 +265,9 @@ async def update_level_roles(
             if role >= bot_member.top_role:
 
                 print(
-                    f"❌ No puc donar '{role.name}' a "
-                    f"{member} perquè el rol del bot "
-                    f"està per sota."
+                    f"❌ No puedo dar '{role.name}' a "
+                    f"{member} porque el rol del bot "
+                    f"está por debajo."
                 )
 
                 continue
@@ -277,25 +277,25 @@ async def update_level_roles(
                 await member.add_roles(
                     role,
                     reason=(
-                        f"Recompensa nivell "
+                        f"Recompensa nivel "
                         f"{required_level}"
                     )
                 )
 
                 print(
-                    f"✅ Rol '{role.name}' donat a "
+                    f"✅ Rol '{role.name}' dado a "
                     f"{member}."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"❌ Discord no permet donar "
+                    f"❌ Discord no permite dar "
                     f"'{role.name}' a {member}."
                 )
 
         # ----------------------------------------------------
-        # TREURE ROL
+        # QUITAR ROL
         # ----------------------------------------------------
 
         else:
@@ -306,9 +306,9 @@ async def update_level_roles(
             if role >= bot_member.top_role:
 
                 print(
-                    f"❌ No puc treure '{role.name}' a "
-                    f"{member} perquè el rol del bot "
-                    f"està per sota."
+                    f"❌ No puedo quitar '{role.name}' a "
+                    f"{member} porque el rol del bot "
+                    f"está por debajo."
                 )
 
                 continue
@@ -318,20 +318,20 @@ async def update_level_roles(
                 await member.remove_roles(
                     role,
                     reason=(
-                        f"Ja no correspon al nivell "
+                        f"Ya no corresponde al nivel "
                         f"{level}"
                     )
                 )
 
                 print(
-                    f"🗑️ Rol '{role.name}' tret de "
+                    f"🗑️ Rol '{role.name}' quitado de "
                     f"{member}."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"❌ Discord no permet treure "
+                    f"❌ Discord no permite quitar "
                     f"'{role.name}' de {member}."
                 )
 
@@ -349,7 +349,7 @@ class Levels(commands.Cog):
         create_levels_table()
 
         print(
-            "📊 Sistema de nivells carregat."
+            "📊 Sistema de niveles cargado."
         )
 
 
@@ -371,14 +371,14 @@ class Levels(commands.Cog):
         self._levels_checked = True
 
         print(
-            "📊 Comprovant nivells dels usuaris..."
+            "📊 Comprobando niveles de los usuarios..."
         )
 
         await self.update_all_levels()
 
 
     # ========================================================
-    # ACTUALITZAR TOTS ELS NIVELLS
+    # ACTUALIZAR TODOS LOS NIVELES
     # ========================================================
 
     async def update_all_levels(self):
@@ -454,13 +454,13 @@ class Levels(commands.Cog):
             )
 
         print(
-            f"📊 Nivells comprovats. "
-            f"{updated} actualitzats."
+            f"📊 Niveles comprobados. "
+            f"{updated} actualizados."
         )
 
 
     # ========================================================
-    # NOU MISSATGE
+    # NUEVO MENSAJE
     # ========================================================
 
     @commands.Cog.listener()
@@ -502,7 +502,7 @@ class Levels(commands.Cog):
         xp_cooldowns[user_id] = now
 
         # ----------------------------------------------------
-        # XP ALEATÒRIA
+        # XP ALEATORIA
         # ----------------------------------------------------
 
         gained_xp = round(
@@ -534,7 +534,7 @@ class Levels(commands.Cog):
         result = cursor.fetchone()
 
         # ----------------------------------------------------
-        # USUARI NO EXISTEIX
+        # USUARIO NO EXISTE
         # ----------------------------------------------------
 
         if result is None:
@@ -568,7 +568,7 @@ class Levels(commands.Cog):
             )
 
         # ----------------------------------------------------
-        # USUARI EXISTENT
+        # USUARIO EXISTENTE
         # ----------------------------------------------------
 
         else:
@@ -609,7 +609,7 @@ class Levels(commands.Cog):
         connection.close()
 
         # ----------------------------------------------------
-        # ACTUALITZAR ROLS
+        # ACTUALIZAR ROLES
         # ----------------------------------------------------
 
         await update_level_roles(
@@ -618,7 +618,7 @@ class Levels(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # NO HA PUJAT DE NIVELL
+        # NO HA SUBIDO DE NIVEL
         # ----------------------------------------------------
 
         if new_level <= old_level:
@@ -626,8 +626,8 @@ class Levels(commands.Cog):
             return
 
         print(
-            f"🎉 {message.author} ha pujat "
-            f"del nivell {old_level} "
+            f"🎉 ¡{message.author} ha subido "
+            f"del nivel {old_level} "
             f"al {new_level}!"
         )
 
@@ -642,7 +642,7 @@ class Levels(commands.Cog):
         if channel is None:
 
             print(
-                f"❌ No trobo el canal "
+                f"❌ No encuentro el canal "
                 f"{LEVEL_UP_CHANNEL_ID}"
             )
 
@@ -653,19 +653,19 @@ class Levels(commands.Cog):
         # ====================================================
 
         embed = discord.Embed(
-            title=f"🎉 NIVELL {new_level}",
+            title=f"🎉 NIVEL {new_level}",
             description=(
-                f"🎊 Enhorabona, "
+                f"🎊 ¡Enhorabuena, "
                 f"{message.author.mention}!\n\n"
-                f"Has arribat al "
-                f"**nivell {new_level}** "
+                f"¡Has alcanzado el "
+                f"**nivel {new_level}** "
                 f"del servidor!"
             ),
             color=discord.Color.gold()
         )
 
         # ----------------------------------------------------
-        # ROLS DESBLOQUEJATS
+        # ROLES DESBLOQUEADOS
         # ----------------------------------------------------
 
         obtained_roles = []
@@ -699,7 +699,7 @@ class Levels(commands.Cog):
             embed.add_field(
                 name="🏆 Recompensa",
                 value=(
-                    "Has desbloquejat:\n"
+                    "Has desbloqueado:\n"
                     + "\n".join(
                         obtained_roles
                     )
@@ -708,16 +708,16 @@ class Levels(commands.Cog):
             )
 
         # ----------------------------------------------------
-        # NIVELLS IMPORTANTS
+        # NIVELES IMPORTANTES
         # ----------------------------------------------------
 
         if new_level in LEVEL_ROLES:
 
             embed.add_field(
-                name="⭐ Nivell important!",
+                name="⭐ ¡Nivel importante!",
                 value=(
-                    "Has assolit un dels "
-                    "nivells especials del servidor!"
+                    "¡Has alcanzado uno de los "
+                    "niveles especiales del servidor!"
                 ),
                 inline=False
             )
@@ -727,7 +727,7 @@ class Levels(commands.Cog):
         )
 
         embed.set_footer(
-            text="RebirthMC Network • Nivells"
+            text="RebirthMC Network • Niveles"
         )
 
         # ----------------------------------------------------
@@ -748,8 +748,8 @@ class Levels(commands.Cog):
         except discord.Forbidden:
 
             print(
-                "❌ No puc enviar el missatge "
-                "al canal de nivells."
+                "❌ No puedo enviar el mensaje "
+                "al canal de niveles."
             )
 
 
@@ -759,10 +759,10 @@ class Levels(commands.Cog):
 
     @app_commands.command(
         name="level",
-        description="Mostra el nivell i progrés d'un usuari."
+        description="Muestra el nivel y progreso de un usuario."
     )
     @app_commands.describe(
-        user="Usuari del qual vols veure el nivell"
+        user="Usuario del cual quieres ver el nivel"
     )
     async def level(
         self,
@@ -773,7 +773,7 @@ class Levels(commands.Cog):
         if not LEVELS_ENABLED:
 
             await interaction.response.send_message(
-                "❌ El sistema de nivells està desactivat.",
+                "❌ El sistema de niveles está desactivado.",
                 ephemeral=True
             )
 
@@ -821,7 +821,7 @@ class Levels(commands.Cog):
             )
 
         # ----------------------------------------------------
-        # XP DEL NIVELL ACTUAL
+        # XP DEL NIVEL ACTUAL
         # ----------------------------------------------------
 
         current_level_start = (
@@ -831,7 +831,7 @@ class Levels(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # XP DEL SEGÜENT NIVELL
+        # XP DEL SIGUIENTE NIVEL
         # ----------------------------------------------------
 
         next_level = current_level + 1
@@ -843,7 +843,7 @@ class Levels(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # XP ACTUAL DINS DEL NIVELL
+        # XP ACTUAL DENTRO DEL NIVEL
         # ----------------------------------------------------
 
         xp_current_level = (
@@ -899,7 +899,7 @@ class Levels(commands.Cog):
         # ====================================================
 
         embed = discord.Embed(
-            title="📊 Perfil de nivell",
+            title="📊 Perfil de nivel",
             color=discord.Color.blurple()
         )
 
@@ -908,7 +908,7 @@ class Levels(commands.Cog):
         )
 
         embed.add_field(
-            name="🏆 Nivell",
+            name="🏆 Nivel",
             value=f"**{current_level}**",
             inline=True
         )
@@ -920,24 +920,24 @@ class Levels(commands.Cog):
         )
 
         embed.add_field(
-            name="📈 Progrés",
+            name="📈 Progreso",
             value=(
                 f"`{bar}` **{percentage}%**\n"
                 f"**{xp_current_level:.2f} / "
                 f"{xp_needed:.2f} XP**\n"
-                f"⬆️ Et falten **{remaining:.2f} XP**"
+                f"⬆️ Te faltan **{remaining:.2f} XP**"
             ),
             inline=False
         )
 
         embed.add_field(
-            name="🎯 Següent nivell",
-            value=f"**Nivell {next_level}**",
+            name="🎯 Siguiente nivel",
+            value=f"**Nivel {next_level}**",
             inline=True
         )
 
         # ----------------------------------------------------
-        # ROLS DESBLOQUEJATS
+        # ROLES DESBLOQUEADOS
         # ----------------------------------------------------
 
         unlocked_roles = []
@@ -965,7 +965,7 @@ class Levels(commands.Cog):
         if unlocked_roles:
 
             embed.add_field(
-                name="🎭 Rols desbloquejats",
+                name="🎭 Roles desbloqueados",
                 value="\n".join(
                     unlocked_roles
                 ),
@@ -973,7 +973,7 @@ class Levels(commands.Cog):
             )
 
         embed.set_footer(
-            text="RebirthMC Network • Nivells"
+            text="RebirthMC Network • Niveles"
         )
 
         await interaction.response.send_message(
@@ -987,7 +987,7 @@ class Levels(commands.Cog):
 
     @app_commands.command(
         name="leaderboard",
-        description="Mostra el top de nivells del servidor."
+        description="Muestra la clasificación de niveles del servidor."
     )
     async def leaderboard(
         self,
@@ -1017,7 +1017,7 @@ class Levels(commands.Cog):
         if not users:
 
             await interaction.response.send_message(
-                "📊 Encara no hi ha ningú al rànquing.",
+                "📊 Todavía no hay nadie en la clasificación.",
                 ephemeral=True
             )
 
@@ -1045,7 +1045,7 @@ class Levels(commands.Cog):
 
             if member is None:
 
-                name = f"Usuari {user_id}"
+                name = f"Usuario {user_id}"
 
             else:
 
@@ -1058,14 +1058,14 @@ class Levels(commands.Cog):
 
             description += (
                 f"{medal} {name} — "
-                f"**Nivell {level}** "
+                f"**Nivel {level}** "
                 f"• `{xp:.2f} XP`\n"
             )
 
             position += 1
 
         embed = discord.Embed(
-            title="🏆 Leaderboard",
+            title="🏆 Clasificación",
             description=description,
             color=discord.Color.gold()
         )
@@ -1081,19 +1081,19 @@ class Levels(commands.Cog):
 
     # ========================================================
     # /SETLEVEL
-    # NOMÉS ADMINISTRADORS
+    # SOLO ADMINISTRADORES
     # ========================================================
 
     @app_commands.command(
         name="setlevel",
-        description="Estableix el nivell d'un usuari."
+        description="Establece el nivel de un usuario."
     )
     @app_commands.default_permissions(
         administrator=True
     )
     @app_commands.describe(
-        user="Usuari",
-        level="Nivell que vols establir"
+        user="Usuario",
+        level="Nivel que quieres establecer"
     )
     async def setlevel(
         self,
@@ -1105,8 +1105,8 @@ class Levels(commands.Cog):
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquest comandament.",
+                "❌ Solo los administradores pueden "
+                "usar este comando.",
                 ephemeral=True
             )
 
@@ -1115,14 +1115,14 @@ class Levels(commands.Cog):
         if level < 0:
 
             await interaction.response.send_message(
-                "❌ El nivell no pot ser negatiu.",
+                "❌ El nivel no puede ser negativo.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # XP NECESSÀRIA PER AQUEST NIVELL
+        # XP NECESARIA PARA ESTE NIVEL
         # ----------------------------------------------------
 
         xp = total_xp_for_level(
@@ -1194,27 +1194,27 @@ class Levels(commands.Cog):
         )
 
         await interaction.response.send_message(
-            f"✅ {user.mention} ara és "
-            f"**nivell {level}**.\n"
-            f"✨ XP establerta: **{xp:.2f}**",
+            f"✅ {user.mention} ahora es "
+            f"**nivel {level}**.\n"
+            f"✨ XP establecida: **{xp:.2f}**",
             ephemeral=True
         )
 
 
     # ========================================================
     # /RESETLEVEL
-    # NOMÉS ADMINISTRADORS
+    # SOLO ADMINISTRADORS
     # ========================================================
 
     @app_commands.command(
         name="resetlevel",
-        description="Reinicia el nivell d'un usuari."
+        description="Reinicia el nivel de un usuario."
     )
     @app_commands.default_permissions(
         administrator=True
     )
     @app_commands.describe(
-        user="Usuari que vols reiniciar"
+        user="Usuario que quieres reiniciar"
     )
     async def resetlevel(
         self,
@@ -1225,8 +1225,8 @@ class Levels(commands.Cog):
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquest comandament.",
+                "❌ Solo los administradores pueden "
+                "usar este comando.",
                 ephemeral=True
             )
 
@@ -1255,8 +1255,8 @@ class Levels(commands.Cog):
             connection.close()
 
             await interaction.response.send_message(
-                f"ℹ️ {user.mention} ja té el nivell "
-                f"reiniciat.",
+                f"ℹ️ {user.mention} ya tiene el nivel "
+                f"reiniciado.",
                 ephemeral=True
             )
 
@@ -1280,7 +1280,7 @@ class Levels(commands.Cog):
         connection.close()
 
         # ----------------------------------------------------
-        # TREURE ROLS
+        # QUITAR ROLES
         # ----------------------------------------------------
 
         await update_level_roles(
@@ -1289,13 +1289,13 @@ class Levels(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.response.send_message(
-            f"🔄 S'ha reiniciat el nivell de "
+            f"🔄 Se ha reiniciado el nivel de "
             f"{user.mention}.\n"
-            f"📊 Ara té **nivell 0** i **0 XP**.",
+            f"📊 Ahora tiene **nivel 0** y **0 XP**.",
             ephemeral=True
         )
 

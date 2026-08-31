@@ -8,18 +8,18 @@ from events.logs import send_log
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 MODERATION_LOGS_ENABLED = True
 
-# A partir de quants warns → timeout
+# A partir de cuántos warns → timeout
 WARN_TIMEOUT_AT = 5
 
-# Durada del timeout automàtic
+# Duración del timeout automático
 WARN_TIMEOUT_MINUTES = 10
 
-# A partir de quants warns → kick
+# A partir de cuántos warns → kick
 WARN_KICK_AT = 6
 
 
@@ -70,7 +70,7 @@ class Moderation(commands.Cog):
         reason
     ):
         """
-        Afegeix un warn i comprova les accions automàtiques.
+        Añade un warn y comprueba las acciones automáticas.
 
         Retorna:
         warning_count
@@ -81,7 +81,7 @@ class Moderation(commands.Cog):
         connection = connect()
         cursor = connection.cursor()
 
-        # Assegurem que la taula existeix
+        # Aseguramos que la tabla existe
         cursor.execute(
             """
             CREATE TABLE IF NOT EXISTS warnings (
@@ -147,14 +147,14 @@ class Moderation(commands.Cog):
                     timedelta(
                         minutes=WARN_TIMEOUT_MINUTES
                     ),
-                    reason=f"Automàtic: {warning_count} warns"
+                    reason=f"Automático: {warning_count} warns"
                 )
 
                 automatic_timeout = True
 
             except discord.Forbidden:
                 print(
-                    f"[AUTOMOD] No puc fer timeout a {member}."
+                    f"[AUTOMOD] No puedo aplicar timeout a {member}."
                 )
 
             except Exception as e:
@@ -170,14 +170,14 @@ class Moderation(commands.Cog):
 
             try:
                 await member.kick(
-                    reason=f"Automàtic: {warning_count} warns"
+                    reason=f"Automático: {warning_count} warns"
                 )
 
                 automatic_kick = True
 
             except discord.Forbidden:
                 print(
-                    f"[AUTOMOD] No puc expulsar {member}."
+                    f"[AUTOMOD] No puedo expulsar a {member}."
                 )
 
             except Exception as e:
@@ -197,39 +197,39 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="kick",
-        description="Expulsa un membre del servidor."
+        description="Expulsa a un miembro del servidor."
     )
     @app_commands.default_permissions(
         kick_members=True
     )
     @app_commands.describe(
-        member="Membre que vols expulsar",
-        reason="Motiu de l'expulsió"
+        member="Miembro que quieres expulsar",
+        reason="Motivo de la expulsión"
     )
     async def kick(
         self,
         interaction: discord.Interaction,
         member: discord.Member,
-        reason: str = "Sense motiu especificat"
+        reason: str = "Sin motivo especificado"
     ):
 
         if not interaction.user.guild_permissions.kick_members:
             await interaction.response.send_message(
-                "❌ No tens permís per expulsar membres.",
+                "❌ No tienes permiso para expulsar miembros.",
                 ephemeral=True
             )
             return
 
         if member == interaction.user:
             await interaction.response.send_message(
-                "❌ No et pots expulsar a tu mateix.",
+                "❌ No te puedes expulsar a ti mismo.",
                 ephemeral=True
             )
             return
 
         if member == interaction.guild.owner:
             await interaction.response.send_message(
-                "❌ No pots expulsar el propietari del servidor.",
+                "❌ No puedes expulsar al dueño del servidor.",
                 ephemeral=True
             )
             return
@@ -239,12 +239,12 @@ class Moderation(commands.Cog):
             await member.kick(reason=reason)
 
             embed = discord.Embed(
-                title="👢 Membre expulsat",
+                title="👢 Miembro expulsado",
                 color=discord.Color.orange()
             )
 
             embed.add_field(
-                name="👤 Usuari",
+                name="👤 Usuario",
                 value=f"{member.mention}\n`{member.id}`",
                 inline=False
             )
@@ -256,7 +256,7 @@ class Moderation(commands.Cog):
             )
 
             embed.add_field(
-                name="📝 Motiu",
+                name="📝 Motivo",
                 value=reason,
                 inline=True
             )
@@ -266,12 +266,12 @@ class Moderation(commands.Cog):
             )
 
             await self.moderation_log(
-                "👢 Membre expulsat",
-                f"{member.mention} ha estat expulsat.",
+                "👢 Miembro expulsado",
+                f"{member.mention} ha sido expulsado.",
                 discord.Color.orange(),
                 [
                     (
-                        "👤 Usuari",
+                        "👤 Usuario",
                         f"{member} (`{member.id}`)",
                         False
                     ),
@@ -281,7 +281,7 @@ class Moderation(commands.Cog):
                         True
                     ),
                     (
-                        "📝 Motiu",
+                        "📝 Motivo",
                         reason,
                         True
                     )
@@ -291,8 +291,8 @@ class Moderation(commands.Cog):
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No puc expulsar aquest membre. "
-                "Comprova la jerarquia dels rols.",
+                "❌ No puedo expulsar a este miembro. "
+                "Comprueba la jerarquía de los roles.",
                 ephemeral=True
             )
 
@@ -302,39 +302,39 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="ban",
-        description="Baneja un membre del servidor."
+        description="Banea a un miembro del servidor."
     )
     @app_commands.default_permissions(
         ban_members=True
     )
     @app_commands.describe(
-        member="Membre que vols banear",
-        reason="Motiu del ban"
+        member="Miembro que quieres banear",
+        reason="Motivo del ban"
     )
     async def ban(
         self,
         interaction: discord.Interaction,
         member: discord.Member,
-        reason: str = "Sense motiu especificat"
+        reason: str = "Sin motivo especificado"
     ):
 
         if not interaction.user.guild_permissions.ban_members:
             await interaction.response.send_message(
-                "❌ No tens permís per banear membres.",
+                "❌ No tienes permiso para banear miembros.",
                 ephemeral=True
             )
             return
 
         if member == interaction.user:
             await interaction.response.send_message(
-                "❌ No et pots banear a tu mateix.",
+                "❌ No te puedes banear a ti mismo.",
                 ephemeral=True
             )
             return
 
         if member == interaction.guild.owner:
             await interaction.response.send_message(
-                "❌ No pots banear el propietari del servidor.",
+                "❌ No puedes banear al dueño del servidor.",
                 ephemeral=True
             )
             return
@@ -344,12 +344,12 @@ class Moderation(commands.Cog):
             await member.ban(reason=reason)
 
             embed = discord.Embed(
-                title="🔨 Membre banejat",
+                title="🔨 Miembro baneado",
                 color=discord.Color.red()
             )
 
             embed.add_field(
-                name="👤 Usuari",
+                name="👤 Usuario",
                 value=f"{member.mention}\n`{member.id}`",
                 inline=False
             )
@@ -361,7 +361,7 @@ class Moderation(commands.Cog):
             )
 
             embed.add_field(
-                name="📝 Motiu",
+                name="📝 Motivo",
                 value=reason,
                 inline=True
             )
@@ -371,12 +371,12 @@ class Moderation(commands.Cog):
             )
 
             await self.moderation_log(
-                "🔨 Membre banejat",
-                f"{member.mention} ha estat banejat.",
+                "🔨 Miembro baneado",
+                f"{member.mention} ha sido baneado.",
                 discord.Color.red(),
                 [
                     (
-                        "👤 Usuari",
+                        "👤 Usuario",
                         f"{member} (`{member.id}`)",
                         False
                     ),
@@ -386,7 +386,7 @@ class Moderation(commands.Cog):
                         True
                     ),
                     (
-                        "📝 Motiu",
+                        "📝 Motivo",
                         reason,
                         True
                     )
@@ -396,8 +396,8 @@ class Moderation(commands.Cog):
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No puc banear aquest membre. "
-                "Comprova la jerarquia dels rols.",
+                "❌ No puedo banear a este miembro. "
+                "Comprueba la jerarquía de los roles.",
                 ephemeral=True
             )
 
@@ -407,25 +407,25 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="unban",
-        description="Desbaneja un usuari."
+        description="Desbanea a un usuario."
     )
     @app_commands.default_permissions(
         ban_members=True
     )
     @app_commands.describe(
-        user_id="ID de l'usuari que vols desbanear",
-        reason="Motiu del desban"
+        user_id="ID del usuario que quieres desbanear",
+        reason="Motivo del desban"
     )
     async def unban(
         self,
         interaction: discord.Interaction,
         user_id: str,
-        reason: str = "Sense motiu especificat"
+        reason: str = "Sin motivo especificado"
     ):
 
         if not interaction.user.guild_permissions.ban_members:
             await interaction.response.send_message(
-                "❌ No tens permís per desbanear membres.",
+                "❌ No tienes permiso para desbanear miembros.",
                 ephemeral=True
             )
             return
@@ -435,7 +435,7 @@ class Moderation(commands.Cog):
 
         except ValueError:
             await interaction.response.send_message(
-                "❌ La ID no és vàlida.",
+                "❌ La ID no es válida.",
                 ephemeral=True
             )
             return
@@ -448,16 +448,16 @@ class Moderation(commands.Cog):
             )
 
             await interaction.response.send_message(
-                f"✅ **{user}** ha estat desbanejat."
+                f"✅ **{user}** ha sido desbaneado."
             )
 
             await self.moderation_log(
-                "🔓 Membre desbanejat",
-                f"{user.mention} ha estat desbanejat.",
+                "🔓 Miembro desbaneado",
+                f"{user.mention} ha sido desbaneado.",
                 discord.Color.green(),
                 [
                     (
-                        "👤 Usuari",
+                        "👤 Usuario",
                         f"{user} (`{user.id}`)",
                         False
                     ),
@@ -467,7 +467,7 @@ class Moderation(commands.Cog):
                         True
                     ),
                     (
-                        "📝 Motiu",
+                        "📝 Motivo",
                         reason,
                         True
                     )
@@ -477,14 +477,14 @@ class Moderation(commands.Cog):
         except discord.NotFound:
 
             await interaction.response.send_message(
-                "❌ Aquest usuari no està banejat.",
+                "❌ Este usuario no está baneado.",
                 ephemeral=True
             )
 
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No tinc permís per desbanear.",
+                "❌ No tengo permiso para desbanear.",
                 ephemeral=True
             )
 
@@ -494,34 +494,34 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="timeout",
-        description="Posa un membre en timeout."
+        description="Aplica un timeout a un miembro."
     )
     @app_commands.default_permissions(
         moderate_members=True
     )
     @app_commands.describe(
-        member="Membre que vols posar en timeout",
-        minutes="Durada en minuts",
-        reason="Motiu del timeout"
+        member="Miembro al que quieres aplicar timeout",
+        minutes="Duración en minutos",
+        reason="Motivo del timeout"
     )
     async def timeout(
         self,
         interaction: discord.Interaction,
         member: discord.Member,
         minutes: int,
-        reason: str = "Sense motiu especificat"
+        reason: str = "Sin motivo especificado"
     ):
 
         if not interaction.user.guild_permissions.moderate_members:
             await interaction.response.send_message(
-                "❌ No tens permís per posar membres en timeout.",
+                "❌ No tienes permiso para aplicar timeout a miembros.",
                 ephemeral=True
             )
             return
 
         if minutes <= 0 or minutes > 40320:
             await interaction.response.send_message(
-                "❌ La durada ha de ser entre 1 minut i 28 dies.",
+                "❌ La duración debe ser de entre 1 minuto y 28 días.",
                 ephemeral=True
             )
             return
@@ -534,17 +534,17 @@ class Moderation(commands.Cog):
             )
 
             await interaction.response.send_message(
-                f"⏱️ **{member}** ha estat posat en "
-                f"timeout durant **{minutes} minuts**."
+                f"⏱️ **{member}** ha recibido un "
+                f"timeout de **{minutes} minutos**."
             )
 
             await self.moderation_log(
                 "⏱️ Timeout",
-                f"{member.mention} ha estat posat en timeout.",
+                f"Se ha aplicado un timeout a {member.mention}.",
                 discord.Color.yellow(),
                 [
                     (
-                        "👤 Usuari",
+                        "👤 Usuario",
                         f"{member} (`{member.id}`)",
                         False
                     ),
@@ -554,12 +554,12 @@ class Moderation(commands.Cog):
                         True
                     ),
                     (
-                        "⏱️ Durada",
-                        f"{minutes} minuts",
+                        "⏱️ Duración",
+                        f"{minutes} minutos",
                         True
                     ),
                     (
-                        "📝 Motiu",
+                        "📝 Motivo",
                         reason,
                         False
                     )
@@ -569,8 +569,8 @@ class Moderation(commands.Cog):
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No puc posar aquest membre en timeout. "
-                "Comprova la jerarquia dels rols.",
+                "❌ No puedo aplicar timeout a este miembro. "
+                "Comprueba la jerarquía de los roles.",
                 ephemeral=True
             )
 
@@ -580,13 +580,13 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="clear",
-        description="Elimina missatges del canal."
+        description="Elimina mensajes del canal."
     )
     @app_commands.default_permissions(
         manage_messages=True
     )
     @app_commands.describe(
-        amount="Nombre de missatges que vols eliminar"
+        amount="Número de mensajes que quieres eliminar"
     )
     async def clear(
         self,
@@ -596,14 +596,14 @@ class Moderation(commands.Cog):
 
         if not interaction.user.guild_permissions.manage_messages:
             await interaction.response.send_message(
-                "❌ No tens permís per eliminar missatges.",
+                "❌ No tienes permiso para eliminar mensajes.",
                 ephemeral=True
             )
             return
 
         if amount < 1 or amount > 100:
             await interaction.response.send_message(
-                "❌ Has d'especificar entre 1 i 100 missatges.",
+                "❌ Debes especificar entre 1 y 100 mensajes.",
                 ephemeral=True
             )
             return
@@ -619,13 +619,13 @@ class Moderation(commands.Cog):
             )
 
             await interaction.followup.send(
-                f"🧹 He eliminat **{len(deleted)} missatges**.",
+                f"🧹 He eliminado **{len(deleted)} mensajes**.",
                 ephemeral=True
             )
 
             await self.moderation_log(
-                "🧹 Missatges eliminats",
-                f"S'han eliminat missatges a "
+                "🧹 Mensajes eliminados",
+                f"Se han eliminado mensajes en "
                 f"{interaction.channel.mention}.",
                 discord.Color.orange(),
                 [
@@ -640,7 +640,7 @@ class Moderation(commands.Cog):
                         True
                     ),
                     (
-                        "🗑️ Quantitat",
+                        "🗑️ Cantidad",
                         str(len(deleted)),
                         True
                     )
@@ -650,7 +650,7 @@ class Moderation(commands.Cog):
         except discord.Forbidden:
 
             await interaction.followup.send(
-                "❌ No tinc permís per gestionar els missatges.",
+                "❌ No tengo permiso para gestionar los mensajes.",
                 ephemeral=True
             )
 
@@ -660,25 +660,25 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="warn",
-        description="Avisa un membre del servidor."
+        description="Advierte a un miembro del servidor."
     )
     @app_commands.default_permissions(
         moderate_members=True
     )
     @app_commands.describe(
-        member="Membre que vols advertir",
-        reason="Motiu de l'avís"
+        member="Miembro al que quieres advertir",
+        reason="Motivo de la advertencia"
     )
     async def warn(
         self,
         interaction: discord.Interaction,
         member: discord.Member,
-        reason: str = "Sense motiu especificat"
+        reason: str = "Sin motivo especificado"
     ):
 
         if not interaction.user.guild_permissions.moderate_members:
             await interaction.response.send_message(
-                "❌ No tens permís per advertir membres.",
+                "❌ No tienes permiso para advertir a miembros.",
                 ephemeral=True
             )
             return
@@ -696,12 +696,12 @@ class Moderation(commands.Cog):
 
         embed = discord.Embed(
             title="⚠️ Warn",
-            description=f"{member.mention} ha rebut un warn.",
+            description=f"{member.mention} ha recibido un warn.",
             color=discord.Color.orange()
         )
 
         embed.add_field(
-            name="📝 Motiu",
+            name="📝 Motivo",
             value=reason,
             inline=False
         )
@@ -714,15 +714,15 @@ class Moderation(commands.Cog):
 
         if automatic_timeout:
             embed.add_field(
-                name="⏱️ Acció automàtica",
-                value=f"Timeout de **{WARN_TIMEOUT_MINUTES} minuts**",
+                name="⏱️ Acción automática",
+                value=f"Timeout de **{WARN_TIMEOUT_MINUTES} minutos**",
                 inline=False
             )
 
         if automatic_kick:
             embed.add_field(
-                name="👢 Acció automàtica",
-                value="El membre ha estat expulsat automàticament.",
+                name="👢 Acción automática",
+                value="El miembro ha sido expulsado automáticamente.",
                 inline=False
             )
 
@@ -731,12 +731,12 @@ class Moderation(commands.Cog):
         )
 
         await self.moderation_log(
-            "⚠️ Nou warn",
-            f"{member.mention} ha rebut un warn.",
+            "⚠️ Nuevo warn",
+            f"{member.mention} ha recibido un warn.",
             discord.Color.orange(),
             [
                 (
-                    "👤 Usuari",
+                    "👤 Usuario",
                     f"{member} (`{member.id}`)",
                     False
                 ),
@@ -746,7 +746,7 @@ class Moderation(commands.Cog):
                     True
                 ),
                 (
-                    "📝 Motiu",
+                    "📝 Motivo",
                     reason,
                     True
                 ),
@@ -764,7 +764,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="warns",
-        description="Mostra els avisos d'un membre."
+        description="Muestra las advertencias de un miembro."
     )
     @app_commands.default_permissions(
         moderate_members=True
@@ -777,7 +777,7 @@ class Moderation(commands.Cog):
 
         if not interaction.user.guild_permissions.moderate_members:
             await interaction.response.send_message(
-                "❌ No tens permís.",
+                "❌ No tienes permiso.",
                 ephemeral=True
             )
             return
@@ -818,7 +818,7 @@ class Moderation(commands.Cog):
 
         if not warnings:
             await interaction.response.send_message(
-                f"✅ **{member}** no té cap warn.",
+                f"✅ **{member}** no tiene ningún warn.",
                 ephemeral=True
             )
             return
@@ -838,9 +838,9 @@ class Moderation(commands.Cog):
             embed.add_field(
                 name=f"Warn #{warning_id}",
                 value=(
-                    f"📝 **Motiu:** {reason}\n"
+                    f"📝 **Motivo:** {reason}\n"
                     f"👮 **Moderador:** <@{moderator_id}>\n"
-                    f"🕐 **Data:** {timestamp}"
+                    f"🕐 **Fecha:** {timestamp}"
                 ),
                 inline=False
             )
@@ -856,7 +856,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="unwarn",
-        description="Elimina un warn concret."
+        description="Elimina un warn concreto."
     )
     @app_commands.default_permissions(
         moderate_members=True
@@ -870,7 +870,7 @@ class Moderation(commands.Cog):
 
         if not interaction.user.guild_permissions.moderate_members:
             await interaction.response.send_message(
-                "❌ No tens permís.",
+                "❌ No tienes permiso.",
                 ephemeral=True
             )
             return
@@ -899,7 +899,7 @@ class Moderation(commands.Cog):
             connection.close()
 
             await interaction.response.send_message(
-                "❌ Aquest warn no existeix.",
+                "❌ Este warn no existe.",
                 ephemeral=True
             )
             return
@@ -938,14 +938,14 @@ class Moderation(commands.Cog):
         connection.close()
 
         await interaction.response.send_message(
-            f"✅ S'ha eliminat el warn **#{warning_id}** "
+            f"✅ Se ha eliminado el warn **#{warning_id}** "
             f"de {member.mention}.\n"
-            f"📊 Warns actuals: **{remaining}**"
+            f"📊 Warns actuales: **{remaining}**"
         )
 
         await self.moderation_log(
-            "↩️ Warn eliminat",
-            f"S'ha eliminat un warn de {member.mention}.",
+            "↩️ Warn eliminado",
+            f"Se ha eliminado un warn de {member.mention}.",
             discord.Color.green()
         )
 
@@ -955,7 +955,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(
         name="unwarnall",
-        description="Elimina tots els warns d'un membre."
+        description="Elimina todos los warns de un miembro."
     )
     @app_commands.default_permissions(
         moderate_members=True
@@ -968,7 +968,7 @@ class Moderation(commands.Cog):
 
         if not interaction.user.guild_permissions.moderate_members:
             await interaction.response.send_message(
-                "❌ No tens permís.",
+                "❌ No tienes permiso.",
                 ephemeral=True
             )
             return
@@ -994,13 +994,13 @@ class Moderation(commands.Cog):
         connection.close()
 
         await interaction.response.send_message(
-            f"🧹 S'han eliminat **{count} warns** "
+            f"🧹 Se han eliminado **{count} warns** "
             f"de {member.mention}."
         )
 
         await self.moderation_log(
-            "🧹 Tots els warns eliminats",
-            f"S'han eliminat tots els warns de {member.mention}.",
+            "🧹 Todos los warns eliminados",
+            f"Se han eliminado todos los warns de {member.mention}.",
             discord.Color.green()
         )
 

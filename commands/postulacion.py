@@ -4,15 +4,15 @@ from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 POSTULACION_ENABLED = True
 
-# Rol que apareixerà mencionat a la publicació
+# Rol que aparecerá mencionado en la publicación
 STAFF_ROLE_ID = 1541007404588859442
 
-# Enllaç de l'aplicació
+# Enlace de la solicitud
 APPLICATION_URL = "https://prova.cat/"
 
 
@@ -31,7 +31,7 @@ class Postulacion(commands.Cog):
 
     @app_commands.command(
         name="postulacion",
-        description="Publica la informació per entrar a l'Staff."
+        description="Publica la información para entrar al Staff."
     )
     @app_commands.default_permissions(
         administrator=True
@@ -42,34 +42,34 @@ class Postulacion(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # ACTIVAT / DESACTIVAT
+        # ACTIVADO / DESACTIVADO
         # ----------------------------------------------------
 
         if not POSTULACION_ENABLED:
 
             await interaction.response.send_message(
-                "❌ Les postulacions estan desactivades.",
+                "❌ Las postulaciones están desactivadas.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # COMPROVAR ADMIN
+        # COMPROBAR ADMIN
         # ----------------------------------------------------
 
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquest comandament.",
+                "❌ Solo los administradores pueden "
+                "utilizar este comando.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # OBTENIR ROL
+        # OBTENER ROL
         # ----------------------------------------------------
 
         staff_role = interaction.guild.get_role(
@@ -93,33 +93,33 @@ class Postulacion(commands.Cog):
         )
 
         embed.description = (
-            "# 📜 POSTULACIÓ STAFF┃RebirthMC Network\n\n"
+            "# 📜 POSTULACIÓN STAFF┃RebirthMC Network\n\n"
 
-            "Vols formar part de l'equip de "
+            "¿Quieres formar parte del equipo de "
             "RebirthMC? "
             f"**{staff_mention}**\n\n"
 
-            "Estem buscant persones compromeses, "
-            "actives i amb ganes d'aportar a la "
-            "comunitat.\n\n"
+            "Estamos buscando personas comprometidas, "
+            "activas y con ganas de aportar a la "
+            "comunidad.\n\n"
 
-            "## 📋 Requisits bàsics\n\n"
+            "## 📋 Requisitos básicos\n\n"
 
-            "- Ser usuari Premium.\n"
-            "- Tenir 14 anys o més.\n"
-            "- Tenir un bon micròfon.\n"
-            "- No ser staff d'una altra Network.\n"
-            "- Tenir ganes d'aprendre i treballar "
-            "en equip.\n\n"
+            "- Ser usuario Premium.\n"
+            "- Tener 14 años o más.\n"
+            "- Tener un buen micrófono.\n"
+            "- No ser staff de otra Network.\n"
+            "- Tener ganas de aprender y trabajar "
+            "en equipo.\n\n"
 
-            "## 🚀 Postula't aquí:\n\n"
+            "## 🚀 Postúlate aquí:\n\n"
 
-            f"👉 [**Clica aquí per postular-te**]"
+            f"👉 [**Haz clic aquí para postularte**]"
             f"({APPLICATION_URL})\n\n"
 
-            "⚠️ **Les places són limitades.** "
-            "Si compleixes els requisits necessaris, "
-            "ens posarem en contacte amb tu."
+            "⚠️ **Las plazas son limitadas.** "
+            "Si cumples los requisitos necesarios, "
+            "nos pondremos en contacto contigo."
         )
 
         # ----------------------------------------------------
@@ -127,7 +127,7 @@ class Postulacion(commands.Cog):
         # ----------------------------------------------------
 
         embed.set_footer(
-            text="RebirthMC Network • Postulacions Staff"
+            text="RebirthMC Network • Postulaciones Staff"
         )
 
         # ----------------------------------------------------

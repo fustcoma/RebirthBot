@@ -1,4 +1,3 @@
-
 import asyncio
 
 import discord
@@ -7,39 +6,39 @@ from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 TICKETS_ENABLED = True
 
-# Canal on s'envia el panell
+# Canal donde se envía el panel
 TICKET_PANEL_CHANNEL_ID = 1540805821192085660
 
-# Prefix dels canals
+# Prefijo de los canales
 TICKET_NAME_PREFIX = "ticket-"
 
-# Temps abans d'eliminar un ticket
+# Tiempo antes de eliminar un ticket
 DELETE_DELAY = 2
 
 
 # ============================================================
-# CATEGORIES
+# CATEGORÍAS
 # ============================================================
 
-# 🛠️ SUPORT
+# 🛠️ SOPORTE
 TICKET_CATEGORY_SUPPORT_ID = 1541010963707465829
 
-# 💰 COMPRES
+# 💰 COMPRAS
 TICKET_CATEGORY_PURCHASES_ID = 1541010963707465829
 
-# 🚨 REPORT
+# 🚨 REPORTE
 TICKET_CATEGORY_REPORT_ID = 1541010963707465829
 
 # 👮 STAFF
 TICKET_CATEGORY_STAFF_ID = 1541010963707465829
 
-# 🎉 SORTEJOS
-# POSA AQUÍ LA ID REAL
+# 🎉 SORTEOS
+# PON AQUÍ LA ID REAL
 TICKET_CATEGORY_GIVEAWAYS_ID = 1541010963707465829
 
 
@@ -50,15 +49,15 @@ TICKET_CATEGORY_GIVEAWAYS_ID = 1541010963707465829
 PANEL_TITLE = "🎫 Sistema de Tickets"
 
 PANEL_DESCRIPTION = (
-    "Necessites ajuda?\n\n"
-    "Selecciona el tipus de ticket que vols obrir:"
+    "¿Necesitas ayuda?\n\n"
+    "Selecciona el tipo de ticket que deseas abrir:"
 )
 
-CLOSE_BUTTON_TEXT = "Tancar ticket"
+CLOSE_BUTTON_TEXT = "Cerrar ticket"
 
 
 # ============================================================
-# COLORS
+# COLORES
 # ============================================================
 
 PANEL_COLOR = discord.Color.blue()
@@ -83,35 +82,35 @@ TICKET_COLORS = {
 
 
 # ============================================================
-# INFORMACIÓ DE CATEGORIES
+# INFORMACIÓN DE CATEGORÍAS
 # ============================================================
 
 TICKET_TYPES = {
 
     # --------------------------------------------------------
-    # 🛠️ SUPORT
+    # 🛠️ SOPORTE
     # --------------------------------------------------------
 
     "support": {
 
-        "name": "Suport",
+        "name": "Soporte",
 
         "emoji": "🛠️",
 
         "category_id":
             TICKET_CATEGORY_SUPPORT_ID,
 
-        "prefix": "suport"
+        "prefix": "soporte"
     },
 
 
     # --------------------------------------------------------
-    # 💰 COMPRES
+    # 💰 COMPRAS
     # --------------------------------------------------------
 
     "purchases": {
 
-        "name": "Compres",
+        "name": "Compras",
 
         "emoji": "💰",
 
@@ -123,19 +122,19 @@ TICKET_TYPES = {
 
 
     # --------------------------------------------------------
-    # 🚨 REPORT
+    # 🚨 REPORTE
     # --------------------------------------------------------
 
     "report": {
 
-        "name": "Report",
+        "name": "Reporte",
 
         "emoji": "🚨",
 
         "category_id":
             TICKET_CATEGORY_REPORT_ID,
 
-        "prefix": "report"
+        "prefix": "reporte"
     },
 
 
@@ -157,25 +156,25 @@ TICKET_TYPES = {
 
 
     # --------------------------------------------------------
-    # 🎉 SORTEJOS
+    # 🎉 SORTEOS
     # --------------------------------------------------------
 
     "giveaways": {
 
-        "name": "Sortejos",
+        "name": "Sorteos",
 
         "emoji": "🎉",
 
         "category_id":
             TICKET_CATEGORY_GIVEAWAYS_ID,
 
-        "prefix": "sorteig"
+        "prefix": "sorteo"
     }
 }
 
 
 # ============================================================
-# COMPROVAR STAFF
+# COMPROBAR STAFF
 # ============================================================
 
 def is_staff(member: discord.Member):
@@ -184,7 +183,7 @@ def is_staff(member: discord.Member):
 
 
 # ============================================================
-# BOTÓ TANCAR
+# BOTÓN CERRAR
 # ============================================================
 
 class CloseTicketButton(discord.ui.Button):
@@ -212,7 +211,7 @@ class CloseTicketButton(discord.ui.Button):
 
 
         # ----------------------------------------------------
-        # COMPROVAR QUE ÉS UN TICKET
+        # COMPROBAR QUE ES UN TICKET
         # ----------------------------------------------------
 
         if not channel.name.startswith(
@@ -221,7 +220,7 @@ class CloseTicketButton(discord.ui.Button):
 
             await interaction.response.send_message(
 
-                "❌ Aquest canal no és un ticket.",
+                "❌ Este canal no es un ticket.",
 
                 ephemeral=True
             )
@@ -254,8 +253,8 @@ class CloseTicketButton(discord.ui.Button):
 
                 await interaction.response.send_message(
 
-                    "❌ Només el creador del ticket "
-                    "o el staff pot tancar-lo.",
+                    "❌ Solo el creador del ticket "
+                    "o el staff puede cerrarlo.",
 
                     ephemeral=True
                 )
@@ -264,13 +263,13 @@ class CloseTicketButton(discord.ui.Button):
 
 
         # ----------------------------------------------------
-        # AVÍS
+        # AVISO
         # ----------------------------------------------------
 
         await interaction.response.send_message(
 
-            f"🔒 Aquest ticket es tancarà en "
-            f"**{DELETE_DELAY} segons**..."
+            f"🔒 Este ticket se cerrará en "
+            f"**{DELETE_DELAY} segundos**..."
         )
 
 
@@ -292,7 +291,7 @@ class CloseTicketButton(discord.ui.Button):
             await channel.delete(
 
                 reason=(
-                    f"Ticket tancat per "
+                    f"Ticket cerrado por "
                     f"{interaction.user}"
                 )
             )
@@ -305,7 +304,7 @@ class CloseTicketButton(discord.ui.Button):
 
             print(
 
-                f"❌ No puc eliminar "
+                f"❌ No puedo eliminar "
                 f"{channel.name}"
             )
 
@@ -349,22 +348,22 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # COMPROVAR CATEGORIA CONFIGURADA
+    # COMPROBAR CATEGORÍA CONFIGURADA
     # --------------------------------------------------------
 
     if not category_id:
 
         await interaction.response.send_message(
 
-            f"❌ La categoria de "
-            f"**{data['name']}** encara no està configurada.",
+            f"❌ La categoría de "
+            f"**{data['name']}** aún no está configurada.",
 
             ephemeral=True
         )
 
         print(
 
-            f"❌ Falta configurar la categoria "
+            f"❌ Falta configurar la categoría "
             f"{data['name']}."
         )
 
@@ -372,7 +371,7 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # BUSCAR CATEGORIA
+    # BUSCAR CATEGORÍA
     # --------------------------------------------------------
 
     category = guild.get_channel(
@@ -383,7 +382,7 @@ async def create_ticket(
 
         await interaction.response.send_message(
 
-            f"❌ No he trobat la categoria de "
+            f"❌ No he encontrado la categoría de "
             f"**{data['name']}**.",
 
             ephemeral=True
@@ -393,7 +392,7 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # COMPROVAR SI JA TÉ TICKET
+    # COMPROBAR SI YA TIENE TICKET
     # --------------------------------------------------------
 
     for channel in category.channels:
@@ -402,7 +401,7 @@ async def create_ticket(
 
             await interaction.response.send_message(
 
-                f"❌ Ja tens un ticket obert de "
+                f"❌ Ya tienes un ticket abierto de "
                 f"**{data['name']}**: "
                 f"{channel.mention}",
 
@@ -413,7 +412,7 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # RESPONDRE
+    # RESPONDER
     # --------------------------------------------------------
 
     await interaction.response.defer(
@@ -422,7 +421,7 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # NOM DEL CANAL
+    # NOMBRE DEL CANAL
     # --------------------------------------------------------
 
     username = member.name.lower()[:20]
@@ -504,7 +503,7 @@ async def create_ticket(
 
                     f"Ticket de "
                     f"{data['name']} "
-                    f"creat per {member}"
+                    f"creado por {member}"
                 )
             )
         )
@@ -513,8 +512,8 @@ async def create_ticket(
 
         await interaction.followup.send(
 
-            "❌ No tinc permisos per crear "
-            "canals.",
+            "❌ No tengo permisos para crear "
+            "canales.",
 
             ephemeral=True
         )
@@ -526,13 +525,13 @@ async def create_ticket(
 
         print(
 
-            f"❌ Error creant ticket: "
+            f"❌ Error creando ticket: "
             f"{error}"
         )
 
         await interaction.followup.send(
 
-            "❌ Hi ha hagut un error creant "
+            "❌ Ha ocurrido un error creando "
             "el ticket.",
 
             ephemeral=True
@@ -555,13 +554,13 @@ async def create_ticket(
 
         description=(
 
-            f"Hola {member.mention}!\n\n"
+            f"¡Hola {member.mention}!\n\n"
 
-            f"Has obert un ticket de "
+            f"Has abierto un ticket de "
             f"**{data['name']}**.\n\n"
 
-            "Explica el teu problema o pregunta "
-            "i un membre de l'equip t'ajudarà."
+            "Explica tu problema o pregunta "
+            "y un miembro del equipo te atenderá."
         ),
 
         color=TICKET_COLORS[
@@ -571,12 +570,12 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # USUARI
+    # USUARIO
     # --------------------------------------------------------
 
     embed.add_field(
 
-        name="👤 Usuari",
+        name="👤 Usuario",
 
         value=member.mention,
 
@@ -585,12 +584,12 @@ async def create_ticket(
 
 
     # --------------------------------------------------------
-    # CATEGORIA
+    # CATEGORÍA
     # --------------------------------------------------------
 
     embed.add_field(
 
-        name="📁 Categoria",
+        name="📁 Categoría",
 
         value=(
 
@@ -624,8 +623,8 @@ async def create_ticket(
 
         text=(
 
-            "Quan ja no necessitis ajuda, "
-            "prem 🔒 Tancar ticket."
+            "Cuando ya no necesites ayuda, "
+            "presiona 🔒 Cerrar ticket."
         )
     )
 
@@ -649,18 +648,18 @@ async def create_ticket(
 
         print(
 
-            f"❌ No puc enviar el missatge "
+            f"❌ No puedo enviar el mensaje "
             f"a {ticket_channel.name}"
         )
 
 
     # --------------------------------------------------------
-    # CONFIRMACIÓ
+    # CONFIRMACIÓN
     # --------------------------------------------------------
 
     await interaction.followup.send(
 
-        f"✅ Ticket de **{data['name']}** creat: "
+        f"✅ Ticket de **{data['name']}** creado: "
         f"{ticket_channel.mention}",
 
         ephemeral=True
@@ -669,15 +668,15 @@ async def create_ticket(
 
     print(
 
-        f"🎫 Ticket creat: "
+        f"🎫 Ticket creado: "
         f"{ticket_channel.name} "
         f"({data['name']}) "
-        f"per {member}"
+        f"por {member}"
     )
 
 
 # ============================================================
-# 🛠️ BOTÓ SUPORT
+# 🛠️ BOTÓN SOPORTE
 # ============================================================
 
 class SupportTicketButton(
@@ -688,7 +687,7 @@ class SupportTicketButton(
 
         super().__init__(
 
-            label="Suport",
+            label="Soporte",
 
             emoji="🛠️",
 
@@ -712,7 +711,7 @@ class SupportTicketButton(
 
 
 # ============================================================
-# 💰 BOTÓ COMPRES
+# 💰 BOTÓN COMPRAS
 # ============================================================
 
 class PurchasesTicketButton(
@@ -723,7 +722,7 @@ class PurchasesTicketButton(
 
         super().__init__(
 
-            label="Compres",
+            label="Compras",
 
             emoji="💰",
 
@@ -747,7 +746,7 @@ class PurchasesTicketButton(
 
 
 # ============================================================
-# 🚨 BOTÓ REPORT
+# 🚨 BOTÓN REPORTE
 # ============================================================
 
 class ReportTicketButton(
@@ -758,7 +757,7 @@ class ReportTicketButton(
 
         super().__init__(
 
-            label="Report",
+            label="Reporte",
 
             emoji="🚨",
 
@@ -782,7 +781,7 @@ class ReportTicketButton(
 
 
 # ============================================================
-# 👮 BOTÓ STAFF
+# 👮 BOTÓN STAFF
 # ============================================================
 
 class StaffTicketButton(
@@ -817,7 +816,7 @@ class StaffTicketButton(
 
 
 # ============================================================
-# 🎉 BOTÓ SORTEJOS
+# 🎉 BOTÓN SORTEOS
 # ============================================================
 
 class GiveawaysTicketButton(
@@ -828,7 +827,7 @@ class GiveawaysTicketButton(
 
         super().__init__(
 
-            label="Sortejos",
+            label="Sorteos",
 
             emoji="🎉",
 
@@ -908,7 +907,7 @@ class Tickets(commands.Cog):
 
 
     # ========================================================
-    # BOTONS PERSISTENTS
+    # BOTONES PERSISTENTES
     # ========================================================
 
     async def cog_load(self):
@@ -922,7 +921,7 @@ class Tickets(commands.Cog):
         )
 
         print(
-            "🎫 Botons de tickets persistents carregats."
+            "🎫 Botones de tickets persistentes cargados."
         )
 
 
@@ -935,7 +934,7 @@ class Tickets(commands.Cog):
         name="ticketpanel",
 
         description=(
-            "Envia el panell per obrir tickets."
+            "Envía el panel para abrir tickets."
         )
     )
 
@@ -959,7 +958,7 @@ class Tickets(commands.Cog):
 
             await interaction.response.send_message(
 
-                "❌ No tens permís per fer això.",
+                "❌ No tienes permiso para hacer esto.",
 
                 ephemeral=True
             )
@@ -968,14 +967,14 @@ class Tickets(commands.Cog):
 
 
         # ----------------------------------------------------
-        # ACTIVAT
+        # ACTIVADO
         # ----------------------------------------------------
 
         if not TICKETS_ENABLED:
 
             await interaction.response.send_message(
 
-                "❌ Els tickets estan desactivats.",
+                "❌ Los tickets están desactivados.",
 
                 ephemeral=True
             )
@@ -996,7 +995,7 @@ class Tickets(commands.Cog):
 
             await interaction.response.send_message(
 
-                "❌ No he trobat el canal del panell.",
+                "❌ No he encontrado el canal del panel.",
 
                 ephemeral=True
             )
@@ -1019,16 +1018,16 @@ class Tickets(commands.Cog):
 
 
         # ----------------------------------------------------
-        # SUPORT
+        # SOPORTE
         # ----------------------------------------------------
 
         embed.add_field(
 
-            name="🛠️ Suport",
+            name="🛠️ Soporte",
 
             value=(
 
-                "Problemes, dubtes o ajuda "
+                "Problemas, dudas o ayuda "
                 "general."
             ),
 
@@ -1037,17 +1036,17 @@ class Tickets(commands.Cog):
 
 
         # ----------------------------------------------------
-        # COMPRES
+        # COMPRAS
         # ----------------------------------------------------
 
         embed.add_field(
 
-            name="💰 Compres",
+            name="💰 Compras",
 
             value=(
 
-                "Compres, pagaments o problemes "
-                "amb productes."
+                "Compras, pagos o problemas "
+                "con productos."
             ),
 
             inline=True
@@ -1055,17 +1054,17 @@ class Tickets(commands.Cog):
 
 
         # ----------------------------------------------------
-        # REPORT
+        # REPORTE
         # ----------------------------------------------------
 
         embed.add_field(
 
-            name="🚨 Report",
+            name="🚨 Reporte",
 
             value=(
 
-                "Reportar usuaris o problemes "
-                "al servidor."
+                "Reportar usuarios o problemas "
+                "en el servidor."
             ),
 
             inline=True
@@ -1082,8 +1081,8 @@ class Tickets(commands.Cog):
 
             value=(
 
-                "Contactar directament amb "
-                "l'equip de staff."
+                "Contactar directamente con "
+                "el equipo de staff."
             ),
 
             inline=True
@@ -1091,17 +1090,17 @@ class Tickets(commands.Cog):
 
 
         # ----------------------------------------------------
-        # SORTEJOS
+        # SORTEOS
         # ----------------------------------------------------
 
         embed.add_field(
 
-            name="🎉 Sortejos",
+            name="🎉 Sorteos",
 
             value=(
 
-                "Problemes o consultes "
-                "relacionades amb sorteigs."
+                "Problemas o consultas "
+                "relacionadas con sorteos."
             ),
 
             inline=True
@@ -1135,7 +1134,7 @@ class Tickets(commands.Cog):
 
         await interaction.response.send_message(
 
-            f"✅ Panell enviat a "
+            f"✅ Panel enviado a "
             f"{channel.mention}",
 
             ephemeral=True
@@ -1144,7 +1143,7 @@ class Tickets(commands.Cog):
 
         print(
 
-            f"🎫 Panell de tickets enviat a "
+            f"🎫 Panel de tickets enviado a "
             f"#{channel.name}"
         )
 
@@ -1158,4 +1157,3 @@ async def setup(bot):
     await bot.add_cog(
         Tickets(bot)
     )
-

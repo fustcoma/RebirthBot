@@ -1,17 +1,16 @@
-
 import discord
 from discord import app_commands
 from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 VERIFY_ROLE_ID = 1541142866129068082
 
 # ------------------------------------------------------------
-# ENLLAÇOS
+# ENLACES
 # ------------------------------------------------------------
 
 WEBSITE_URL = "https://rebirthmc.net"
@@ -20,7 +19,7 @@ STORE_URL = "https://store.rebirthmc.net"
 
 
 # ============================================================
-# COLORS
+# COLORES
 # ============================================================
 
 VERIFY_COLOR = discord.Color.blurple()
@@ -32,21 +31,21 @@ RULES_COLOR = discord.Color.blurple()
 # TEXTOS
 # ============================================================
 
-VERIFY_TITLE = "🔐 VERIFICACIÓ"
+VERIFY_TITLE = "🔐 VERIFICACIÓN"
 
 VERIFY_DESCRIPTION = (
-    "Benvingut/da al **Discord de RebirthMC**!\n\n"
-    "Per poder accedir al servidor, primer t'has de "
-    "verificar.\n\n"
-    "Prem el botó **✅ Verificar** que trobaràs a "
-    "continuació.\n\n"
-    "Un cop verificat, rebràs automàticament el rol "
-    "corresponent."
+    "¡Bienvenido/a al **Discord de RebirthMC**!\n\n"
+    "Para poder acceder al servidor, primero te tienes "
+    "que verificar.\n\n"
+    "Presiona el botón **✅ Verificar** que encontrarás a "
+    "continuación.\n\n"
+    "Una vez verificado, recibirás automáticamente el rol "
+    "correspondiente."
 )
 
 
 # ============================================================
-# BOTÓ DE VERIFICACIÓ
+# BOTÓN DE VERIFICACIÓN
 # ============================================================
 
 class VerifyButton(
@@ -75,15 +74,15 @@ class VerifyButton(
         if interaction.guild is None:
 
             await interaction.response.send_message(
-                "❌ Aquest botó només funciona dins "
-                "d'un servidor.",
+                "❌ Este botón solo funciona dentro "
+                "de un servidor.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # OBTENIR ROL
+        # OBTENER ROL
         # ----------------------------------------------------
 
         role = interaction.guild.get_role(
@@ -93,33 +92,33 @@ class VerifyButton(
         if role is None:
 
             await interaction.response.send_message(
-                "❌ No he pogut trobar el rol de "
-                "verificació.",
+                "❌ No he podido encontrar el rol de "
+                "verificación.",
                 ephemeral=True
             )
 
             print(
-                f"❌ No trobo el rol de verificació "
+                f"❌ No encuentro el rol de verificación "
                 f"{VERIFY_ROLE_ID}."
             )
 
             return
 
         # ----------------------------------------------------
-        # COMPROVAR SI JA ESTÀ VERIFICAT
+        # COMPROBAR SI YA ESTÁ VERIFICADO
         # ----------------------------------------------------
 
         if role in interaction.user.roles:
 
             await interaction.response.send_message(
-                "✅ Ja estàs verificat!",
+                "✅ ¡Ya estás verificado!",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # COMPROVAR BOT
+        # COMPROBAR BOT
         # ----------------------------------------------------
 
         bot_member = interaction.guild.me
@@ -127,7 +126,7 @@ class VerifyButton(
         if bot_member is None:
 
             await interaction.response.send_message(
-                "❌ No he pogut obtenir la informació "
+                "❌ No he podido obtener la información "
                 "del bot.",
                 ephemeral=True
             )
@@ -135,48 +134,48 @@ class VerifyButton(
             return
 
         # ----------------------------------------------------
-        # COMPROVAR JERARQUIA
+        # COMPROBAR JERARQUÍA
         # ----------------------------------------------------
 
         if role >= bot_member.top_role:
 
             await interaction.response.send_message(
-                "❌ No puc donar-te el rol de verificació "
-                "perquè el rol del bot està per sota "
-                "d'aquest rol.",
+                "❌ No puedo darte el rol de verificación "
+                "porque el rol del bot está por debajo "
+                "de este rol.",
                 ephemeral=True
             )
 
             print(
-                f"❌ No puc donar el rol "
+                f"❌ No puedo dar el rol "
                 f"'{role.name}'. El rol del bot "
-                f"està per sota."
+                f"está por debajo."
             )
 
             return
 
         # ----------------------------------------------------
-        # DONAR ROL
+        # DAR ROL
         # ----------------------------------------------------
 
         try:
 
             await interaction.user.add_roles(
                 role,
-                reason="Verificació mitjançant botó"
+                reason="Verificación mediante botón"
             )
 
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No tinc permisos per donar-te "
-                "el rol de verificació.",
+                "❌ No tengo permisos para darte "
+                "el rol de verificación.",
                 ephemeral=True
             )
 
             print(
-                "❌ Discord ha rebutjat l'addició "
-                "del rol de verificació."
+                "❌ Discord ha rechazado la adición "
+                "del rol de verificación."
             )
 
             return
@@ -184,31 +183,31 @@ class VerifyButton(
         except discord.HTTPException as error:
 
             await interaction.response.send_message(
-                "❌ Hi ha hagut un error en verificar-te. "
-                "Torna-ho a intentar.",
+                "❌ Ha ocurrido un error al verificarte. "
+                "Vuelve a intentarlo.",
                 ephemeral=True
             )
 
             print(
-                f"❌ Error donant rol de verificació: "
+                f"❌ Error dando rol de verificación: "
                 f"{error}"
             )
 
             return
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.response.send_message(
-            f"🎉 T'has verificat correctament!\n\n"
-            f"Has rebut el rol {role.mention}.",
+            f"🎉 ¡Te has verificado correctamente!\n\n"
+            f"Has recibido el rol {role.mention}.",
             ephemeral=True
         )
 
 
 # ============================================================
-# VIEW PERSISTENT
+# VIEW PERSISTENTE
 # ============================================================
 
 class VerifyView(
@@ -242,7 +241,7 @@ class Verify(commands.Cog):
         self.verify_view_added = False
 
         print(
-            "🔐 Sistema de verificació carregat."
+            "🔐 Sistema de verificación cargado."
         )
 
 
@@ -260,7 +259,7 @@ class Verify(commands.Cog):
             return
 
         # ----------------------------------------------------
-        # REGISTRAR VIEW PERSISTENT
+        # REGISTRAR VIEW PERSISTENTE
         # ----------------------------------------------------
 
         self.bot.add_view(
@@ -270,7 +269,7 @@ class Verify(commands.Cog):
         self.verify_view_added = True
 
         print(
-            "🔐 Botó de verificació persistent carregat."
+            "🔐 Botón de verificación persistentemente cargado."
         )
 
 
@@ -280,7 +279,7 @@ class Verify(commands.Cog):
 
     @app_commands.command(
         name="verificar",
-        description="Publica el missatge de verificació."
+        description="Publica el mensaje de verificación."
     )
     @app_commands.default_permissions(
         administrator=True
@@ -291,14 +290,14 @@ class Verify(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # COMPROVAR ADMIN
+        # COMPROBAR ADMIN
         # ----------------------------------------------------
 
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquesta comanda.",
+                "❌ Solo los administradores pueden "
+                "utilizar este comando.",
                 ephemeral=True
             )
 
@@ -311,8 +310,8 @@ class Verify(commands.Cog):
         if interaction.guild is None:
 
             await interaction.response.send_message(
-                "❌ Aquesta comanda només funciona "
-                "dins d'un servidor.",
+                "❌ Este comando solo funciona "
+                "dentro de un servidor.",
                 ephemeral=True
             )
 
@@ -329,7 +328,7 @@ class Verify(commands.Cog):
         if role is None:
 
             await interaction.response.send_message(
-                "❌ No trobo el rol de verificació.\n\n"
+                "❌ No encuentro el rol de verificación.\n\n"
                 f"ID: `{VERIFY_ROLE_ID}`",
                 ephemeral=True
             )
@@ -347,25 +346,25 @@ class Verify(commands.Cog):
         )
 
         embed.add_field(
-            name="🛡️ Com funciona?",
+            name="🛡️ ¿Cómo funciona?",
             value=(
-                "Prem **✅ Verificar** i rebràs "
-                "automàticament el rol de verificat."
+                "Presiona **✅ Verificar** y recibirás "
+                "automáticamente el rol de verificado."
             ),
             inline=False
         )
 
         embed.add_field(
-            name="📋 Important",
+            name="📋 Importante",
             value=(
-                "Abans de participar al servidor, "
-                "assegura't d'haver llegit les regles."
+                "Antes de participar en el servidor, "
+                "asegúrate de haber leído las reglas."
             ),
             inline=False
         )
 
         embed.set_footer(
-            text="RebirthMC Network • Verificació"
+            text="RebirthMC Network • Verificación"
         )
 
         # ----------------------------------------------------
@@ -382,8 +381,8 @@ class Verify(commands.Cog):
         except discord.Forbidden:
 
             await interaction.response.send_message(
-                "❌ No tinc permisos per enviar "
-                "missatges en aquest canal.",
+                "❌ No tengo permisos para enviar "
+                "mensajes en este canal.",
                 ephemeral=True
             )
 
@@ -392,24 +391,24 @@ class Verify(commands.Cog):
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error enviant verificació: "
+                f"❌ Error enviando verificación: "
                 f"{error}"
             )
 
             await interaction.response.send_message(
-                "❌ No he pogut publicar el missatge "
-                "de verificació.",
+                "❌ No he podido publicar el mensaje "
+                "de verificación.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.response.send_message(
-            "✅ Missatge de verificació publicat.",
+            "✅ Mensaje de verificación publicado.",
             ephemeral=True
         )
 
@@ -420,7 +419,7 @@ class Verify(commands.Cog):
 
     @app_commands.command(
         name="rules",
-        description="Publica les regles del servidor."
+        description="Publica las reglas del servidor."
     )
     @app_commands.default_permissions(
         administrator=True
@@ -431,14 +430,14 @@ class Verify(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # COMPROVAR ADMIN
+        # COMPROBAR ADMIN
         # ----------------------------------------------------
 
         if not interaction.user.guild_permissions.administrator:
 
             await interaction.response.send_message(
-                "❌ Només els administradors poden "
-                "utilitzar aquesta comanda.",
+                "❌ Solo los administradores pueden "
+                "utilizar este comando.",
                 ephemeral=True
             )
 
@@ -451,8 +450,8 @@ class Verify(commands.Cog):
         if interaction.guild is None:
 
             await interaction.response.send_message(
-                "❌ Aquesta comanda només funciona "
-                "dins d'un servidor.",
+                "❌ Este comando solo funciona "
+                "dentro de un servidor.",
                 ephemeral=True
             )
 
@@ -518,8 +517,8 @@ class Verify(commands.Cog):
         embed.add_field(
             name="🛡️ Amenazas",
             value=(
-                "Prohibido amenazar a players o staff "
-                "members de DDoS, doxxing y amenazas "
+                "Prohibido amenazar a jugadores o miembros "
+                "del staff de DDoS, doxxing y amenazas "
                 "de muerte."
             ),
             inline=False
@@ -535,7 +534,7 @@ class Verify(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # ENLLAÇOS
+        # ENLACES
         # ----------------------------------------------------
 
         embed.add_field(
@@ -586,7 +585,7 @@ class Verify(commands.Cog):
             return
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.response.send_message(
