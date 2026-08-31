@@ -194,6 +194,12 @@ i després:
 py -m pip install -r requirements.txt
 ```
 
+Si et dona error, prova de posar aquesta comanda i probar a fer un altre cop el `pip`
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+
 ---
 
 # 8. Configurar el token del bot
