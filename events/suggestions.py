@@ -1,4 +1,3 @@
-
 import sqlite3
 import time
 from pathlib import Path
@@ -9,7 +8,7 @@ from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 SUGGESTIONS_ENABLED = True
@@ -21,7 +20,7 @@ DISLIKE_EMOJI = "👎"
 
 
 # ============================================================
-# BASE DE DADES
+# BASE DE DATOS
 # ============================================================
 
 DATABASE_PATH = (
@@ -32,7 +31,7 @@ DATABASE_PATH = (
 
 
 # ============================================================
-# COLORS
+# COLORES
 # ============================================================
 
 SUGGESTION_COLOR = discord.Color.blurple()
@@ -42,7 +41,7 @@ CONSIDER_COLOR = discord.Color.gold()
 
 
 # ============================================================
-# ESTATS
+# ESTADOS
 # ============================================================
 
 STATUS_PENDING = "PENDING"
@@ -52,7 +51,7 @@ STATUS_CONSIDER = "CONSIDER"
 
 
 # ============================================================
-# DATABASE
+# BASE DE DATOS - FUNCIONES
 # ============================================================
 
 def get_connection():
@@ -92,7 +91,7 @@ def init_database():
 
 
 # ============================================================
-# OBTENIR SUGGERIMENT
+# OBTENER SUGERENCIA
 # ============================================================
 
 def get_suggestion(
@@ -130,7 +129,7 @@ def get_suggestion(
 
 
 # ============================================================
-# CANVIAR ESTAT
+# CAMBIAR ESTADO
 # ============================================================
 
 def set_status(
@@ -166,7 +165,7 @@ def set_status(
 
 
 # ============================================================
-# ESTAT → TEXT + COLOR
+# ESTADO → TEXTO + COLOR
 # ============================================================
 
 def get_status_data(
@@ -176,32 +175,32 @@ def get_status_data(
     if status == STATUS_ACCEPTED:
 
         return (
-            "🟢 ACCEPTAT",
+            "🟢 ACEPTADA",
             ACCEPTED_COLOR
         )
 
     if status == STATUS_REJECTED:
 
         return (
-            "🔴 REBUTJAT",
+            "🔴 RECHAZADA",
             REJECTED_COLOR
         )
 
     if status == STATUS_CONSIDER:
 
         return (
-            "🟡 EN CONSIDERACIÓ",
+            "🟡 EN CONSIDERACIÓN",
             CONSIDER_COLOR
         )
 
     return (
-        "⚪ PENDENT",
+        "⚪ PENDIENTE",
         SUGGESTION_COLOR
     )
 
 
 # ============================================================
-# COMPTAR REACCIONS
+# CONTAR REACCIONES
 # ============================================================
 
 def get_reaction_count(
@@ -213,8 +212,8 @@ def get_reaction_count(
 
         if str(reaction.emoji) == emoji:
 
-            # El bot té la seva pròpia reacció,
-            # per tant no la comptem.
+            # El bot tiene su propia reacción,
+            # por lo tanto no la contamos.
 
             count = reaction.count - 1
 
@@ -248,11 +247,11 @@ def create_suggestion_embed(
     )
 
     embed.description = (
-        f"# 💡 SUGGERIMENT #{suggestion_id}\n\n"
+        f"# 💡 SUGERENCIA #{suggestion_id}\n\n"
 
         f"👤 **Autor:** {author.mention}\n\n"
 
-        f"💬 **Suggeriment:**\n"
+        f"💬 **Sugerencia:**\n"
         f"{suggestion}\n\n"
 
         f"👍 **{likes}**     "
@@ -263,7 +262,7 @@ def create_suggestion_embed(
 
     embed.set_footer(
         text=(
-            "RebirthMC Network • Suggeriments"
+            "RebirthMC Network • Sugerencias"
         )
     )
 
@@ -271,7 +270,7 @@ def create_suggestion_embed(
 
 
 # ============================================================
-# ACTUALITZAR MISSATGE
+# ACTUALIZAR MENSAJE
 # ============================================================
 
 async def update_suggestion_message(
@@ -340,16 +339,16 @@ class Suggestions(commands.Cog):
         self.ready_done = True
 
         print(
-            "💡 Sistema de suggeriments carregat."
+            "💡 Sistema de sugerencias cargado."
         )
 
 
     # ========================================================
     # ON MESSAGE
     #
-    # Si algú escriu directament al canal de
-    # suggeriments, eliminem el missatge i
-    # avisem l'usuari per privat.
+    # Si alguien escribe directamente en el canal de
+    # sugerencias, eliminamos el mensaje y
+    # avisamos al usuario por privado.
     # ========================================================
 
     @commands.Cog.listener()
@@ -359,7 +358,7 @@ class Suggestions(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # SISTEMA ACTIVAT?
+        # ¿SISTEMA ACTIVADO?
         # ----------------------------------------------------
 
         if not SUGGESTIONS_ENABLED:
@@ -367,7 +366,7 @@ class Suggestions(commands.Cog):
             return
 
         # ----------------------------------------------------
-        # NOMÉS CANAL DE SUGGERIMENTS
+        # SOLO CANAL DE SUGERENCIAS
         # ----------------------------------------------------
 
         if message.channel.id != SUGGESTIONS_CHANNEL_ID:
@@ -383,7 +382,7 @@ class Suggestions(commands.Cog):
             return
 
         # ----------------------------------------------------
-        # ESBORRAR MISSATGE
+        # BORRAR MENSAJE
         # ----------------------------------------------------
 
         try:
@@ -397,9 +396,9 @@ class Suggestions(commands.Cog):
         except discord.Forbidden:
 
             print(
-                "❌ No tinc permisos per "
-                "esborrar missatges al canal "
-                "de suggeriments."
+                "❌ No tengo permisos para "
+                "borrar mensajes en el canal "
+                "de sugerencias."
             )
 
             return
@@ -407,41 +406,41 @@ class Suggestions(commands.Cog):
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error esborrant missatge "
-                f"de suggeriments: {error}"
+                f"❌ Error borrando mensaje "
+                f"de sugerencias: {error}"
             )
 
             return
 
         # ----------------------------------------------------
-        # AVISAR L'USUARI
+        # AVISAR AL USUARIO
         # ----------------------------------------------------
 
         try:
 
             await message.author.send(
-                "❌ **No pots escriure directament "
-                "en aquest canal.**\n\n"
-                "💡 Per enviar un suggeriment has "
-                "d'utilitzar el comandament "
-                "**`/suggeriments`**."
+                "❌ **No puedes escribir directamente "
+                "en este canal.**\n\n"
+                "💡 Para enviar una sugerencia debes "
+                "utilizar el comando "
+                "**`/sugerencias`**."
             )
 
         except discord.Forbidden:
 
-            # L'usuari té els missatges privats tancats.
+            # El usuario tiene los mensajes privados cerrados.
             pass
 
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error enviant l'avís "
+                f"❌ Error enviando el aviso "
                 f"a {message.author}: {error}"
             )
 
 
     # ========================================================
-    # REACCIÓ AFEGIDA
+    # REACCIÓN AÑADIDA
     # ========================================================
 
     @commands.Cog.listener()
@@ -481,7 +480,7 @@ class Suggestions(commands.Cog):
 
 
     # ========================================================
-    # REACCIÓ ELIMINADA
+    # REACCIÓN ELIMINADA
     # ========================================================
 
     @commands.Cog.listener()
@@ -515,7 +514,7 @@ class Suggestions(commands.Cog):
 
 
     # ========================================================
-    # ACTUALITZAR DES DE REACCIÓ
+    # ACTUALIZAR DESDE REACCIÓN
     # ========================================================
 
     async def update_from_reaction(
@@ -577,14 +576,14 @@ class Suggestions(commands.Cog):
             except Exception as error:
 
                 print(
-                    f"❌ Error obtenint canal: "
+                    f"❌ Error obteniendo canal: "
                     f"{error}"
                 )
 
                 return
 
         # ----------------------------------------------------
-        # MISSATGE
+        # MENSAJE
         # ----------------------------------------------------
 
         try:
@@ -600,7 +599,7 @@ class Suggestions(commands.Cog):
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error obtenint missatge: "
+                f"❌ Error obteniendo mensaje: "
                 f"{error}"
             )
 
@@ -650,7 +649,7 @@ class Suggestions(commands.Cog):
                 )
 
         # ----------------------------------------------------
-        # ACTUALITZAR
+        # ACTUALIZAR
         # ----------------------------------------------------
 
         try:
@@ -666,33 +665,33 @@ class Suggestions(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error actualitzant "
-                f"suggeriment #{suggestion_id}: "
+                f"❌ Error actualizando "
+                f"sugerencia #{suggestion_id}: "
                 f"{error}"
             )
 
 
     # ========================================================
-    # /SUGGERIMENTS
+    # /SUGERENCIAS
     # ========================================================
 
     @app_commands.command(
-        name="suggeriments",
-        description="Envia un suggeriment."
+        name="sugerencias",
+        description="Envía una sugerencia."
     )
     @app_commands.describe(
-        suggeriment=(
-            "El suggeriment que vols proposar."
+        sugerencia=(
+            "La sugerencia que quieres proponer."
         )
     )
-    async def suggeriments(
+    async def sugerencias(
         self,
         interaction: discord.Interaction,
-        suggeriment: str
+        sugerencia: str
     ):
 
         # ----------------------------------------------------
-        # RESPONDRE IMMEDIATAMENT
+        # RESPONDER INMEDIATAMENTE
         # ----------------------------------------------------
 
         await interaction.response.defer(
@@ -700,39 +699,39 @@ class Suggestions(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # ACTIVAT
+        # ACTIVADO
         # ----------------------------------------------------
 
         if not SUGGESTIONS_ENABLED:
 
             await interaction.followup.send(
-                "❌ El sistema de suggeriments "
-                "està desactivat.",
+                "❌ El sistema de sugerencias "
+                "está desactivado.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # TEXT
+        # TEXTO
         # ----------------------------------------------------
 
-        suggeriment = suggeriment.strip()
+        sugerencia = sugerencia.strip()
 
-        if not suggeriment:
+        if not sugerencia:
 
             await interaction.followup.send(
-                "❌ Has d'escriure un suggeriment.",
+                "❌ Debes escribir una sugerencia.",
                 ephemeral=True
             )
 
             return
 
-        if len(suggeriment) > 2000:
+        if len(sugerencia) > 2000:
 
             await interaction.followup.send(
-                "❌ El suggeriment no pot superar "
-                "els **2000 caràcters**.",
+                "❌ La sugerencia no puede superar "
+                "los **2000 caracteres**.",
                 ephemeral=True
             )
 
@@ -745,8 +744,8 @@ class Suggestions(commands.Cog):
         if interaction.guild is None:
 
             await interaction.followup.send(
-                "❌ Aquest comandament només "
-                "funciona dins d'un servidor.",
+                "❌ Este comando solo "
+                "funciona dentro de un servidor.",
                 ephemeral=True
             )
 
@@ -771,20 +770,20 @@ class Suggestions(commands.Cog):
             except Exception as error:
 
                 print(
-                    f"❌ No puc obtenir el canal "
-                    f"de suggeriments: {error}"
+                    f"❌ No puedo obtener el canal "
+                    f"de sugerencias: {error}"
                 )
 
                 await interaction.followup.send(
-                    "❌ No he pogut trobar el canal "
-                    "de suggeriments.",
+                    "❌ No he podido encontrar el canal "
+                    "de sugerencias.",
                     ephemeral=True
                 )
 
                 return
 
         # ----------------------------------------------------
-        # CREAR REGISTRE
+        # CREAR REGISTRO
         # ----------------------------------------------------
 
         try:
@@ -811,7 +810,7 @@ class Suggestions(commands.Cog):
                     SUGGESTIONS_CHANNEL_ID,
                     0,
                     interaction.user.id,
-                    suggeriment,
+                    sugerencia,
                     STATUS_PENDING,
                     int(time.time())
                 )
@@ -825,13 +824,13 @@ class Suggestions(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error SQLite creant "
-                f"suggeriment: {error}"
+                f"❌ Error SQLite creando "
+                f"sugerencia: {error}"
             )
 
             await interaction.followup.send(
-                "❌ No he pogut guardar "
-                "el suggeriment.",
+                "❌ No he podido guardar "
+                "la sugerencia.",
                 ephemeral=True
             )
 
@@ -844,7 +843,7 @@ class Suggestions(commands.Cog):
         embed = create_suggestion_embed(
             suggestion_id,
             interaction.user,
-            suggeriment,
+            sugerencia,
             likes=0,
             dislikes=0,
             status=STATUS_PENDING
@@ -863,7 +862,7 @@ class Suggestions(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error publicant suggeriment: "
+                f"❌ Error publicando sugerencia: "
                 f"{error}"
             )
 
@@ -884,8 +883,8 @@ class Suggestions(commands.Cog):
             connection.close()
 
             await interaction.followup.send(
-                "❌ No he pogut publicar "
-                "el suggeriment.",
+                "❌ No he podido publicar "
+                "la sugerencia.",
                 ephemeral=True
             )
 
@@ -918,12 +917,12 @@ class Suggestions(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error guardant message_id: "
+                f"❌ Error guardando message_id: "
                 f"{error}"
             )
 
         # ----------------------------------------------------
-        # AFEGIR REACCIONS
+        # AÑADIR REACCIONES
         # ----------------------------------------------------
 
         try:
@@ -939,24 +938,24 @@ class Suggestions(commands.Cog):
         except discord.Forbidden:
 
             print(
-                "❌ No tinc permisos per "
-                "afegir reaccions."
+                "❌ No tengo permisos para "
+                "añadir reacciones."
             )
 
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error afegint reaccions: "
+                f"❌ Error añadiendo reacciones: "
                 f"{error}"
             )
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.followup.send(
-            f"✅ El teu suggeriment "
-            f"**#{suggestion_id}** s'ha publicat a "
+            f"✅ Tu sugerencia "
+            f"**#{suggestion_id}** se ha publicado en "
             f"{channel.mention}.",
             ephemeral=True
         )
@@ -968,13 +967,13 @@ class Suggestions(commands.Cog):
 
     @app_commands.command(
         name="accept",
-        description="Accepta un suggeriment."
+        description="Acepta una sugerencia."
     )
     @app_commands.default_permissions(
         administrator=True
     )
     @app_commands.describe(
-        suggestion_id="ID del suggeriment."
+        suggestion_id="ID de la sugerencia."
     )
     async def accept(
         self,
@@ -995,13 +994,13 @@ class Suggestions(commands.Cog):
 
     @app_commands.command(
         name="reject",
-        description="Rebutja un suggeriment."
+        description="Rechaza una sugerencia."
     )
     @app_commands.default_permissions(
         administrator=True
     )
     @app_commands.describe(
-        suggestion_id="ID del suggeriment."
+        suggestion_id="ID de la sugerencia."
     )
     async def reject(
         self,
@@ -1022,13 +1021,13 @@ class Suggestions(commands.Cog):
 
     @app_commands.command(
         name="consider",
-        description="Posa un suggeriment en consideració."
+        description="Pone una sugerencia en consideración."
     )
     @app_commands.default_permissions(
         administrator=True
     )
     @app_commands.describe(
-        suggestion_id="ID del suggeriment."
+        suggestion_id="ID de la sugerencia."
     )
     async def consider(
         self,
@@ -1044,7 +1043,7 @@ class Suggestions(commands.Cog):
 
 
     # ========================================================
-    # CANVIAR ESTAT
+    # CAMBIAR ESTADO
     # ========================================================
 
     async def change_status(
@@ -1055,7 +1054,7 @@ class Suggestions(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # RESPONDRE IMMEDIATAMENT
+        # RESPONDER INMEDIATAMENTE
         # ----------------------------------------------------
 
         await interaction.response.defer(
@@ -1069,15 +1068,15 @@ class Suggestions(commands.Cog):
         if interaction.guild is None:
 
             await interaction.followup.send(
-                "❌ Aquest comandament només "
-                "funciona dins d'un servidor.",
+                "❌ Este comando solo "
+                "funciona dentro de un servidor.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # OBTENIR SUGGERIMENT
+        # OBTENER SUGERENCIA
         # ----------------------------------------------------
 
         suggestion = get_suggestion(
@@ -1087,7 +1086,7 @@ class Suggestions(commands.Cog):
         if suggestion is None:
 
             await interaction.followup.send(
-                "❌ No existeix aquest suggeriment.",
+                "❌ No existe esta sugerencia.",
                 ephemeral=True
             )
 
@@ -1112,15 +1111,15 @@ class Suggestions(commands.Cog):
         if guild_id != interaction.guild.id:
 
             await interaction.followup.send(
-                "❌ Aquest suggeriment "
-                "no pertany a aquest servidor.",
+                "❌ Esta sugerencia "
+                "no pertenece a este servidor.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # CANVIAR ESTAT
+        # CAMBIAR ESTADO
         # ----------------------------------------------------
 
         success = set_status(
@@ -1132,8 +1131,8 @@ class Suggestions(commands.Cog):
         if not success:
 
             await interaction.followup.send(
-                "❌ No s'ha pogut actualitzar "
-                "el suggeriment.",
+                "❌ No se ha podido actualizar "
+                "la sugerencia.",
                 ephemeral=True
             )
 
@@ -1158,13 +1157,13 @@ class Suggestions(commands.Cog):
             except Exception as error:
 
                 print(
-                    f"❌ Error obtenint canal: "
+                    f"❌ Error obteniendo canal: "
                     f"{error}"
                 )
 
                 await interaction.followup.send(
-                    "⚠️ L'estat s'ha guardat a "
-                    "SQLite, però no he trobat "
+                    "⚠️ El estado se ha guardado en "
+                    "SQLite, pero no he encontrado "
                     "el canal.",
                     ephemeral=True
                 )
@@ -1172,7 +1171,7 @@ class Suggestions(commands.Cog):
                 return
 
         # ----------------------------------------------------
-        # MISSATGE
+        # MENSAJE
         # ----------------------------------------------------
 
         try:
@@ -1184,8 +1183,8 @@ class Suggestions(commands.Cog):
         except discord.NotFound:
 
             await interaction.followup.send(
-                "⚠️ L'estat s'ha guardat, però "
-                "el missatge ja no existeix.",
+                "⚠️ El estado se ha guardado, pero "
+                "el mensaje ya no existe.",
                 ephemeral=True
             )
 
@@ -1194,13 +1193,13 @@ class Suggestions(commands.Cog):
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error obtenint missatge: "
+                f"❌ Error obteniendo mensaje: "
                 f"{error}"
             )
 
             await interaction.followup.send(
-                "⚠️ L'estat s'ha guardat, però "
-                "no he pogut obtenir el missatge.",
+                "⚠️ El estado se ha guardado, pero "
+                "no he podido obtener el mensaje.",
                 ephemeral=True
             )
 
@@ -1240,7 +1239,7 @@ class Suggestions(commands.Cog):
                 )
 
         # ----------------------------------------------------
-        # ACTUALITZAR EMBED
+        # ACTUALIZAR EMBED
         # ----------------------------------------------------
 
         try:
@@ -1256,21 +1255,21 @@ class Suggestions(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error actualitzant embed: "
+                f"❌ Error actualizando embed: "
                 f"{error}"
             )
 
             await interaction.followup.send(
-                "⚠️ L'estat s'ha guardat a "
-                "SQLite, però no he pogut "
-                "actualitzar l'embed.",
+                "⚠️ El estado se ha guardado en "
+                "SQLite, pero no he podido "
+                "actualizar el embed.",
                 ephemeral=True
             )
 
             return
 
         # ----------------------------------------------------
-        # CONFIRMACIÓ
+        # CONFIRMACIÓN
         # ----------------------------------------------------
 
         status_text, _ = get_status_data(
@@ -1278,8 +1277,8 @@ class Suggestions(commands.Cog):
         )
 
         await interaction.followup.send(
-            f"✅ El suggeriment "
-            f"**#{suggestion_id}** ara està com "
+            f"✅ La sugerencia "
+            f"**#{suggestion_id}** ahora está como "
             f"**{status_text}**.",
             ephemeral=True
         )
@@ -1296,4 +1295,3 @@ async def setup(
     await bot.add_cog(
         Suggestions(bot)
     )
-

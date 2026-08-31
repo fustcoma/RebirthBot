@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 # Activar / desactivar el welcome
@@ -20,16 +20,16 @@ WELCOME_ENABLED = True
 # Canal del welcome
 WELCOME_CHANNEL_ID = 1540758633216872468
 
-# Rol que es dona automàticament
+# Rol que se asigna automáticamente
 WELCOME_ROLE_ID = 1540758763307274289
 
 
 # ============================================================
-# ESTAT DEL WELCOME
+# ESTADO DEL WELCOME
 # ============================================================
 
-# Guardem aquí l'última vegada que el bot va comprovar
-# els membres del servidor.
+# Guardamos aquí la última vez que el bot comprobó
+# los miembros del servidor.
 
 WELCOME_STATE_FILE = (
     Path(__file__).parent.parent
@@ -39,7 +39,7 @@ WELCOME_STATE_FILE = (
 
 
 # ============================================================
-# IMATGE
+# IMAGEN
 # ============================================================
 
 IMAGE_WIDTH = 700
@@ -47,12 +47,12 @@ IMAGE_HEIGHT = 260
 
 
 # ============================================================
-# FONS
+# FONDO
 # ============================================================
 
-# None = utilitzar un color
+# None = utilizar un color
 #
-# Exemple:
+# Ejemplo:
 #
 # BACKGROUND_IMAGE = "assets/welcome_background.png"
 
@@ -79,7 +79,7 @@ AVATAR_BORDER_COLOR = (
 
 
 # ============================================================
-# TEXT PRINCIPAL
+# TEXTO PRINCIPAL
 # ============================================================
 
 JOIN_TEXT_SIZE = 28
@@ -94,7 +94,7 @@ JOIN_TEXT_Y = 140
 
 
 # ============================================================
-# MEMBRE #N
+# MIEMBRO #N
 # ============================================================
 
 MEMBER_TEXT_SIZE = 21
@@ -109,10 +109,10 @@ MEMBER_TEXT_Y = 185
 
 
 # ============================================================
-# FONT
+# FUENTE
 # ============================================================
 
-# Exemple:
+# Ejemplo:
 #
 # FONT_PATH = "assets/font.ttf"
 
@@ -120,21 +120,21 @@ FONT_PATH = None
 
 
 # ============================================================
-# MISSATGE
+# MENSAJE
 # ============================================================
 
 WELCOME_MESSAGE = (
-    "Hola {member}, benvingut a **{server}**!"
+    "¡Hola {member}, bienvenido/a a **{server}**!"
 )
 
 
 # ============================================================
-# ESTAT
+# ESTADO
 # ============================================================
 
 def load_welcome_state():
 
-    # Si no existeix el fitxer, retornem un diccionari buit.
+    # Si no existe el archivo, devolvemos un diccionario vacío.
 
     if not WELCOME_STATE_FILE.exists():
 
@@ -153,7 +153,7 @@ def load_welcome_state():
     except Exception as error:
 
         print(
-            f"❌ Error carregant l'estat del welcome: "
+            f"❌ Error cargando el estado del welcome: "
             f"{error}"
         )
 
@@ -183,13 +183,13 @@ def save_welcome_state(state):
     except Exception as error:
 
         print(
-            f"❌ Error guardant l'estat del welcome: "
+            f"❌ Error guardando el estado del welcome: "
             f"{error}"
         )
 
 
 # ============================================================
-# FONT
+# FUENTE
 # ============================================================
 
 def get_font(size):
@@ -216,7 +216,7 @@ def get_font(size):
 
 
 # ============================================================
-# CREAR IMATGE
+# CREAR IMAGEN
 # ============================================================
 
 def create_welcome_image(
@@ -226,7 +226,7 @@ def create_welcome_image(
 ):
 
     # --------------------------------------------------------
-    # FONS
+    # FONDO
     # --------------------------------------------------------
 
     if (
@@ -279,7 +279,7 @@ def create_welcome_image(
     )
 
 
-    # Màscara circular
+    # Máscara circular
 
     mask = Image.new(
         "L",
@@ -305,7 +305,7 @@ def create_welcome_image(
     )
 
 
-    # Posició centrada
+    # Posición centrada
 
     avatar_x = (
         IMAGE_WIDTH -
@@ -316,7 +316,7 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # BORDA DE L'AVATAR
+    # BORDE DEL AVATAR
     # --------------------------------------------------------
 
     draw.ellipse(
@@ -337,7 +337,7 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # POSAR AVATAR
+    # COLOCAR AVATAR
     # --------------------------------------------------------
 
     background.paste(
@@ -351,7 +351,7 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # FONTS
+    # FUENTES
     # --------------------------------------------------------
 
     join_font = get_font(
@@ -364,11 +364,11 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # TEXT PRINCIPAL
+    # TEXTO PRINCIPAL
     # --------------------------------------------------------
 
     join_text = (
-        f"{username} s'ha unit al server"
+        f"{username} se ha unido al servidor"
     )
 
     bbox = draw.textbbox(
@@ -399,11 +399,11 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # MEMBRE
+    # MIEMBRO
     # --------------------------------------------------------
 
     member_text = (
-        f"Membre #{member_number}"
+        f"Miembro #{member_number}"
     )
 
     bbox = draw.textbbox(
@@ -434,7 +434,7 @@ def create_welcome_image(
 
 
     # --------------------------------------------------------
-    # GUARDAR A MEMÒRIA
+    # GUARDAR EN MEMORIA
     # --------------------------------------------------------
 
     output = io.BytesIO()
@@ -459,7 +459,7 @@ class Welcome(commands.Cog):
 
         self.bot = bot
 
-        # Estat persistent
+        # Estado persistente
         self.welcome_state = load_welcome_state()
 
 
@@ -473,7 +473,7 @@ class Welcome(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # SISTEMA ACTIVAT?
+        # ¿SISTEMA ACTIVADO?
         # ----------------------------------------------------
 
         if not WELCOME_ENABLED:
@@ -481,7 +481,7 @@ class Welcome(commands.Cog):
 
 
         # ====================================================
-        # DONAR ROL
+        # ASIGNAR ROL
         # ====================================================
 
         role = member.guild.get_role(
@@ -491,7 +491,7 @@ class Welcome(commands.Cog):
         if role is None:
 
             print(
-                f"❌ No he trobat el rol "
+                f"❌ No he encontrado el rol "
                 f"{WELCOME_ROLE_ID}"
             )
 
@@ -499,36 +499,36 @@ class Welcome(commands.Cog):
 
             try:
 
-                # Només el donem si encara no el té.
+                # Solo se lo damos si aún no lo tiene.
 
                 if role not in member.roles:
 
                     await member.add_roles(
                         role,
-                        reason="Rol automàtic de benvinguda"
+                        reason="Rol automático de bienvenida"
                     )
 
                     print(
-                        f"🎭 Rol {role.name} donat a "
+                        f"🎭 Rol {role.name} asignado a "
                         f"{member}"
                     )
 
             except discord.Forbidden:
 
                 print(
-                    f"❌ No puc donar el rol "
+                    f"❌ No puedo asignar el rol "
                     f"{role.name} a {member}."
                 )
 
                 print(
-                    "Comprova que el rol del bot "
-                    "estigui per sobre del rol."
+                    "Comprueba que el rol del bot "
+                    "esté por encima del rol."
                 )
 
             except Exception as error:
 
                 print(
-                    f"❌ Error donant el rol: {error}"
+                    f"❌ Error asignando el rol: {error}"
                 )
 
 
@@ -543,7 +543,7 @@ class Welcome(commands.Cog):
         if channel is None:
 
             print(
-                f"❌ No he trobat el canal "
+                f"❌ No he encontrado el canal "
                 f"{WELCOME_CHANNEL_ID}"
             )
 
@@ -560,7 +560,7 @@ class Welcome(commands.Cog):
 
 
         # ====================================================
-        # DESCARREGAR AVATAR
+        # DESCARGAR AVATAR
         # ====================================================
 
         try:
@@ -574,8 +574,8 @@ class Welcome(commands.Cog):
                     if response.status != 200:
 
                         print(
-                            "❌ No he pogut descarregar "
-                            "l'avatar."
+                            "❌ No he podido descargar "
+                            "el avatar."
                         )
 
                         return False
@@ -585,7 +585,7 @@ class Welcome(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error descarregant l'avatar: "
+                f"❌ Error descargando el avatar: "
                 f"{error}"
             )
 
@@ -593,7 +593,7 @@ class Welcome(commands.Cog):
 
 
         # ====================================================
-        # CREAR IMATGE
+        # CREAR IMAGEN
         # ====================================================
 
         try:
@@ -607,7 +607,7 @@ class Welcome(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error creant la welcome card: "
+                f"❌ Error creando la tarjeta de welcome: "
                 f"{error}"
             )
 
@@ -615,7 +615,7 @@ class Welcome(commands.Cog):
 
 
         # ====================================================
-        # MISSATGE
+        # MENSAJE
         # ====================================================
 
         message = WELCOME_MESSAGE.format(
@@ -641,7 +641,7 @@ class Welcome(commands.Cog):
             )
 
             print(
-                f"👋 Welcome enviat per {member}"
+                f"👋 Welcome enviado para {member}"
             )
 
             return True
@@ -649,21 +649,21 @@ class Welcome(commands.Cog):
         except discord.Forbidden:
 
             print(
-                f"❌ No tinc permisos per enviar "
-                f"missatges a {channel.name}"
+                f"❌ No tengo permisos para enviar "
+                f"mensajes en {channel.name}"
             )
 
         except Exception as error:
 
             print(
-                f"❌ Error enviant welcome: {error}"
+                f"❌ Error enviando welcome: {error}"
             )
 
         return False
 
 
     # ========================================================
-    # COMPROVAR MEMBRES PERDUTS
+    # COMPROBAR MIEMBROS PERDIDOS
     # ========================================================
 
     async def check_missed_members(
@@ -685,7 +685,7 @@ class Welcome(commands.Cog):
 
 
         # ----------------------------------------------------
-        # Buscar última comprovació
+        # Buscar última comprobación
         # ----------------------------------------------------
 
         guild_key = str(
@@ -700,16 +700,16 @@ class Welcome(commands.Cog):
 
 
         # ----------------------------------------------------
-        # PRIMERA VEGADA
+        # PRIMERA VEZ
         # ----------------------------------------------------
 
-        # Si és la primera vegada que utilitzem aquest
-        # sistema, NO donarem welcome a tothom.
+        # Si es la primera vez que utilizamos este
+        # sistema, NO daremos welcome a todos.
         #
-        # Simplement guardem el moment actual.
+        # Simplemente guardamos el momento actual.
         #
-        # A partir d'aquí, qualsevol membre que entri
-        # mentre el bot estigui apagat serà detectat.
+        # A partir de aquí, cualquier miembro que entre
+        # mientras el bot esté apagado será detectado.
 
         if last_check_string is None:
 
@@ -722,7 +722,7 @@ class Welcome(commands.Cog):
             )
 
             print(
-                f"👋 Welcome: primera comprovació "
+                f"👋 Welcome: primera comprobación "
                 f"de {guild.name}."
             )
 
@@ -730,7 +730,7 @@ class Welcome(commands.Cog):
 
 
         # ----------------------------------------------------
-        # Convertir la data
+        # Convertir la fecha
         # ----------------------------------------------------
 
         try:
@@ -748,9 +748,9 @@ class Welcome(commands.Cog):
         except Exception:
 
             print(
-                f"⚠️ Data de welcome incorrecta "
-                f"per {guild.name}. "
-                f"Reiniciant registre."
+                f"⚠️ Fecha de welcome incorrecta "
+                f"para {guild.name}. "
+                f"Reiniciando registro."
             )
 
             self.welcome_state[
@@ -765,21 +765,21 @@ class Welcome(commands.Cog):
 
 
         # ----------------------------------------------------
-        # BUSCAR MEMBRES QUE HAN ENTRAT MENTRE EL BOT
-        # ESTAVA APAGAT
+        # BUSCAR MIEMBROS QUE HAN ENTRADO MIENTRAS EL BOT
+        # ESTABA APAGADO
         # ----------------------------------------------------
 
         missed_members = []
 
         for member in guild.members:
 
-            # Bots no reben welcome
+            # Los bots no reciben welcome
 
             if member.bot:
                 continue
 
-            # Si Discord no té registrada la data
-            # d'entrada, no podem comprovar-la.
+            # Si Discord no tiene registrada la fecha
+            # de entrada, no podemos comprobarla.
 
             if member.joined_at is None:
                 continue
@@ -798,15 +798,15 @@ class Welcome(commands.Cog):
         if missed_members:
 
             print(
-                f"👋 He detectat "
-                f"{len(missed_members)} membre(s) "
-                f"que van entrar mentre el bot estava apagat."
+                f"👋 He detectado "
+                f"{len(missed_members)} miembro(s) "
+                f"que entraron mientras el bot estaba apagado."
             )
 
         for member in missed_members:
 
             print(
-                f"🔎 Welcome perdut detectat: "
+                f"🔎 Welcome perdido detectado: "
                 f"{member}"
             )
 
@@ -817,13 +817,13 @@ class Welcome(commands.Cog):
             if success:
 
                 print(
-                    f"✅ Welcome recuperat per "
+                    f"✅ Welcome recuperado para "
                     f"{member}"
                 )
 
 
         # ----------------------------------------------------
-        # ACTUALITZAR ÚLTIMA COMPROVACIÓ
+        # ACTUALIZAR ÚLTIMA COMPROBACIÓN
         # ----------------------------------------------------
 
         self.welcome_state[
@@ -844,8 +844,8 @@ class Welcome(commands.Cog):
         self
     ):
 
-        # Evitar executar la comprovació diverses vegades
-        # si Discord reconnecta el bot.
+        # Evitar ejecutar la comprobación varias veces
+        # si Discord reconecta el bot.
 
         if getattr(
             self,
@@ -858,7 +858,7 @@ class Welcome(commands.Cog):
         self._ready_checked = True
 
         print(
-            "👋 Welcome: comprovant membres..."
+            "👋 Welcome: comprobando miembros..."
         )
 
         for guild in self.bot.guilds:
@@ -872,7 +872,7 @@ class Welcome(commands.Cog):
             except Exception as error:
 
                 print(
-                    f"❌ Error comprovant membres "
+                    f"❌ Error comprobando miembros "
                     f"de {guild.name}: {error}"
                 )
 
@@ -888,7 +888,7 @@ class Welcome(commands.Cog):
     ):
 
         # ----------------------------------------------------
-        # SISTEMA ACTIVAT?
+        # ¿SISTEMA ACTIVADO?
         # ----------------------------------------------------
 
         if not WELCOME_ENABLED:
@@ -913,7 +913,7 @@ class Welcome(commands.Cog):
 
         if success:
 
-            # Guardem que aquest membre ja ha rebut
+            # Guardamos que este miembro ya ha recibido
             # el welcome.
 
             guild_key = str(
@@ -939,13 +939,13 @@ class Welcome(commands.Cog):
 
 async def setup(bot):
 
-    # Evitar carregar el sistema de Welcome més d'una vegada
+    # Evitar cargar el sistema de Welcome más de una vez
 
     if bot.get_cog("Welcome") is not None:
 
         print(
-            "⚠️ Welcome ja estava carregat. "
-            "No es tornarà a carregar."
+            "⚠️ Welcome ya estaba cargado. "
+            "No se volverá a cargar."
         )
 
         return
@@ -955,5 +955,5 @@ async def setup(bot):
     )
 
     print(
-        "👋 Sistema de Welcome carregat una sola vegada."
+        "👋 Sistema de Welcome cargado una sola vez."
     )
