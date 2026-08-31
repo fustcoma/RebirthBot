@@ -1,4 +1,3 @@
-
 import asyncio
 import random
 import re
@@ -12,26 +11,26 @@ from discord.ext import commands
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 GIVEAWAYS_ENABLED = True
 
-# Rol que rep les mencions dels sorteigs
+# Rol que recibe las menciones de los sorteos
 GIVEAWAY_ROLE_ID = 1541002745773957162
 
-# Rol que significa que l'usuari està verificat
+# Rol que significa que el usuario está verificado
 VERIFIED_ROLE_ID = 1541142866129068082
 
-# Canal / destinació per reclamar premis
+# Canal / destino para reclamar premios
 TICKET_CHANNEL_ID = 1540805821192085660
 
-# Colors
+# Colores
 GIVEAWAY_COLOR = discord.Color.blurple()
 FINISHED_COLOR = discord.Color.gold()
 ERROR_COLOR = discord.Color.red()
 
-# Base de dades
+# Base de datos
 DATABASE_PATH = (
     Path(__file__).parent.parent
     / "database"
@@ -40,7 +39,7 @@ DATABASE_PATH = (
 
 
 # ============================================================
-# DATABASE
+# BASE DE DATOS
 # ============================================================
 
 def get_connection():
@@ -119,8 +118,8 @@ def init_database():
         if column not in existing_columns:
 
             print(
-                f"🔧 Afegint columna '{column}' "
-                f"a la base de dades..."
+                f"🔧 Añadiendo columna '{column}' "
+                f"a la base de datos..."
             )
 
             cursor.execute(sql)
@@ -154,11 +153,11 @@ def init_database():
     connection.commit()
     connection.close()
 
-    print("💾 Base de dades de giveaways preparada.")
+    print("💾 Base de datos de sorteos preparada.")
 
 
 # ============================================================
-# DURACIÓ
+# DURACIÓN
 # ============================================================
 
 def parse_duration(duration):
@@ -193,7 +192,7 @@ def parse_duration(duration):
 
 
 # ============================================================
-# PARTICIPANTS
+# PARTICIPANTES
 # ============================================================
 
 def get_participant_count(
@@ -250,7 +249,7 @@ def get_participants(
 
 
 # ============================================================
-# REQUISITS
+# REQUISITOS
 # ============================================================
 
 def get_user_level(
@@ -301,7 +300,7 @@ def get_user_level(
     except Exception as error:
 
         print(
-            f"❌ Error obtenint nivell: {error}"
+            f"❌ Error obteniendo nivel: {error}"
         )
 
         return 0
@@ -324,15 +323,15 @@ def check_requirements(
 
             return (
                 False,
-                "❌ El rol requerit no existeix."
+                "❌ El rol requerido no existe."
             )
 
         if role not in member.roles:
 
             return (
                 False,
-                f"❌ Necessites el rol "
-                f"**{role.name}** per participar."
+                f"❌ Necesitas el rol "
+                f"**{role.name}** para participar."
             )
 
     if required_level > 0:
@@ -346,9 +345,9 @@ def check_requirements(
 
             return (
                 False,
-                f"❌ Necessites ser com a mínim "
-                f"**nivell {required_level}**.\n"
-                f"📊 El teu nivell: "
+                f"❌ Necesitas ser como mínimo "
+                f"**nivel {required_level}**.\n"
+                f"📊 Tu nivel: "
                 f"**{current_level}**"
             )
 
@@ -358,8 +357,8 @@ def check_requirements(
 
             return (
                 False,
-                "❌ El sistema de verificació "
-                "no està configurat."
+                "❌ El sistema de verificación "
+                "no está configurado."
             )
 
         verified_role = member.guild.get_role(
@@ -370,22 +369,22 @@ def check_requirements(
 
             return (
                 False,
-                "❌ No trobo el rol de verificat."
+                "❌ No encuentro el rol de verificado."
             )
 
         if verified_role not in member.roles:
 
             return (
                 False,
-                "❌ Has d'estar verificat "
-                "per participar."
+                "❌ Debes estar verificado "
+                "para participar."
             )
 
     return True, None
 
 
 # ============================================================
-# BOTÓ RECLAMAR PREMI
+# BOTÓN RECLAMAR PREMIO
 # ============================================================
 
 class ClaimPrizeView(
@@ -400,7 +399,7 @@ class ClaimPrizeView(
 
         self.add_item(
             discord.ui.Button(
-                label="Obrir un ticket",
+                label="Abrir un ticket",
                 emoji="🎫",
                 style=discord.ButtonStyle.link,
                 url=(
@@ -412,7 +411,7 @@ class ClaimPrizeView(
 
 
 # ============================================================
-# VIEW GIVEAWAY
+# VISTA DEL SORTEO (VIEW GIVEAWAY)
 # ============================================================
 
 class GiveawayView(
@@ -480,7 +479,7 @@ class GiveawayView(
                 connection.close()
 
                 await interaction.response.send_message(
-                    "❌ Aquest sorteig ja no existeix.",
+                    "❌ Este sorteo ya no existe.",
                     ephemeral=True
                 )
 
@@ -502,7 +501,7 @@ class GiveawayView(
                 connection.close()
 
                 await interaction.response.send_message(
-                    "❌ Aquest sorteig ja ha finalitzat.",
+                    "❌ Este sorteo ya ha finalizado.",
                     ephemeral=True
                 )
 
@@ -544,7 +543,7 @@ class GiveawayView(
                 connection.close()
 
                 await interaction.response.send_message(
-                    "❌ Ja participes en aquest sorteig.",
+                    "❌ Ya estás participando en este sorteo.",
                     ephemeral=True
                 )
 
@@ -585,7 +584,7 @@ class GiveawayView(
             connection.close()
 
             await interaction.response.send_message(
-                "🎉 T'has apuntat al sorteig!",
+                "🎉 ¡Te has apuntado al sorteo!",
                 ephemeral=True
             )
 
@@ -606,11 +605,11 @@ class GiveawayView(
                     embed.fields
                 ):
 
-                    if field.name == "👥 Participants":
+                    if field.name == "👥 Participantes":
 
                         embed.set_field_at(
                             index,
-                            name="👥 Participants",
+                            name="👥 Participantes",
                             value=(
                                 f"**{participant_count}**"
                             ),
@@ -627,21 +626,21 @@ class GiveawayView(
             except Exception as error:
 
                 print(
-                    "❌ Error actualitzant "
-                    f"participants: {error}"
+                    "❌ Error actualizando "
+                    f"participantes: {error}"
                 )
 
         except Exception as error:
 
             print(
-                f"❌ Error participant giveaway: {error}"
+                f"❌ Error participando en el sorteo: {error}"
             )
 
             if not interaction.response.is_done():
 
                 await interaction.response.send_message(
-                    "❌ Hi ha hagut un error "
-                    "intentant participar.",
+                    "❌ Ha habido un error "
+                    "intentando participar.",
                     ephemeral=True
                 )
 
@@ -665,7 +664,7 @@ class Giveaways(
         init_database()
 
     # ========================================================
-    # COG LOAD
+    # CARGA DEL COG
     # ========================================================
 
     async def cog_load(self):
@@ -709,8 +708,8 @@ class Giveaways(
                 except Exception as error:
 
                     print(
-                        f"❌ Error carregant "
-                        f"view #{giveaway_id}: {error}"
+                        f"❌ Error cargando "
+                        f"vista #{giveaway_id}: {error}"
                     )
 
             task = asyncio.create_task(
@@ -725,7 +724,7 @@ class Giveaways(
             ] = task
 
         print(
-            f"🎉 {len(giveaways)} sorteig(s) carregat(s)."
+            f"🎉 {len(giveaways)} sorteo(s) cargado(s)."
         )
 
     # ========================================================
@@ -752,9 +751,9 @@ class Giveaways(
         else:
 
             print(
-                f"⏰ El sorteig #{giveaway_id} "
-                f"ja havia acabat mentre el bot "
-                f"estava apagat."
+                f"⏰ El sorteo #{giveaway_id} "
+                f"ya había terminado mientras el bot "
+                f"estaba apagado."
             )
 
         await self.end_giveaway(
@@ -768,18 +767,18 @@ class Giveaways(
 
     @app_commands.command(
         name="giveaway",
-        description="Crea un sorteig."
+        description="Crea un sorteo."
     )
     @app_commands.default_permissions(
         manage_guild=True
     )
     @app_commands.describe(
-        duration="Durada: 30s, 10m, 1h, 2d...",
-        winners="Nombre de guanyadors",
-        prize="Premi del sorteig",
-        required_role="Rol necessari per participar",
-        required_level="Nivell mínim necessari",
-        verified="Exigir compte verificat"
+        duration="Duración: 30s, 10m, 1h, 2d...",
+        winners="Número de ganadores",
+        prize="Premio del sorteo",
+        required_role="Rol necesario para participar",
+        required_level="Nivel mínimo necesario",
+        verified="Exigir cuenta verificada"
     )
     async def giveaway(
         self,
@@ -801,7 +800,7 @@ class Giveaways(
             if not GIVEAWAYS_ENABLED:
 
                 await interaction.followup.send(
-                    "❌ Els sorteigs estan desactivats.",
+                    "❌ Los sorteos están desactivados.",
                     ephemeral=True
                 )
 
@@ -814,11 +813,11 @@ class Giveaways(
             if seconds is None:
 
                 await interaction.followup.send(
-                    "❌ Durada incorrecta.\n\n"
-                    "`30s` → 30 segons\n"
-                    "`10m` → 10 minuts\n"
-                    "`2h` → 2 hores\n"
-                    "`3d` → 3 dies",
+                    "❌ Duración incorrecta.\n\n"
+                    "`30s` → 30 segundos\n"
+                    "`10m` → 10 minutos\n"
+                    "`2h` → 2 horas\n"
+                    "`3d` → 3 días",
                     ephemeral=True
                 )
 
@@ -827,8 +826,8 @@ class Giveaways(
             if seconds < 10:
 
                 await interaction.followup.send(
-                    "❌ El sorteig ha de durar "
-                    "com a mínim **10 segons**.",
+                    "❌ El sorteo debe durar "
+                    "como mínimo **10 segundos**.",
                     ephemeral=True
                 )
 
@@ -837,8 +836,8 @@ class Giveaways(
             if winners < 1:
 
                 await interaction.followup.send(
-                    "❌ Hi ha d'haver almenys "
-                    "un guanyador.",
+                    "❌ Debe haber al menos "
+                    "un ganador.",
                     ephemeral=True
                 )
 
@@ -847,8 +846,8 @@ class Giveaways(
             if winners > 50:
 
                 await interaction.followup.send(
-                    "❌ No pots tenir més de "
-                    "**50 guanyadors**.",
+                    "❌ No puedes tener más de "
+                    "**50 ganadores**.",
                     ephemeral=True
                 )
 
@@ -857,7 +856,7 @@ class Giveaways(
             if not prize.strip():
 
                 await interaction.followup.send(
-                    "❌ Has d'especificar un premi.",
+                    "❌ Debes especificar un premio.",
                     ephemeral=True
                 )
 
@@ -866,7 +865,7 @@ class Giveaways(
             if required_level < 0:
 
                 await interaction.followup.send(
-                    "❌ El nivell no pot ser negatiu.",
+                    "❌ El nivel no puede ser negativo.",
                     ephemeral=True
                 )
 
@@ -877,7 +876,7 @@ class Giveaways(
                 if VERIFIED_ROLE_ID is None:
 
                     await interaction.followup.send(
-                        "❌ No està configurat "
+                        "❌ No está configurado "
                         "`VERIFIED_ROLE_ID`.",
                         ephemeral=True
                     )
@@ -893,7 +892,7 @@ class Giveaways(
                 if verified_role is None:
 
                     await interaction.followup.send(
-                        "❌ No trobo el rol de verificat.",
+                        "❌ No encuentro el rol de verificado.",
                         ephemeral=True
                     )
 
@@ -968,13 +967,13 @@ class Giveaways(
             embed.description = (
                 "# 🏆 SORTEO\n\n"
                 "### 📋 Información del sorteo\n\n"
-                f"- **Premi:** {prize}\n"
-                f"- **Organitzat per:** "
+                f"- **Premio:** {prize}\n"
+                f"- **Organizado por:** "
                 f"**{interaction.user.mention}**\n"
                 f"- **Termina en:** "
                 f"<t:{end_time}:F> "
                 f"(<t:{end_time}:R>)\n\n"
-                f"- **Guanyadors:** "
+                f"- **Ganadores:** "
                 f"**{winners}**"
             )
 
@@ -989,7 +988,7 @@ class Giveaways(
             if required_level > 0:
 
                 requirements.append(
-                    f"📊 Nivell **{required_level}+**"
+                    f"📊 Nivel **{required_level}+**"
                 )
 
             if verified:
@@ -1009,13 +1008,13 @@ class Giveaways(
                 else:
 
                     requirements.append(
-                        "✅ Compte verificat"
+                        "✅ Cuenta verificada"
                     )
 
             if requirements:
 
                 embed.add_field(
-                    name="🔒 Requisits",
+                    name="🔒 Requisitos",
                     value="\n".join(
                         requirements
                     ),
@@ -1023,13 +1022,13 @@ class Giveaways(
                 )
 
             embed.add_field(
-                name="👥 Participants",
+                name="👥 Participantes",
                 value="**0**",
                 inline=True
             )
 
             embed.set_footer(
-                text=f"Sorteig #{giveaway_id}"
+                text=f"Sorteo #{giveaway_id}"
             )
 
             view = GiveawayView(
@@ -1076,14 +1075,14 @@ class Giveaways(
             ] = task
 
             await interaction.followup.send(
-                f"✅ Sorteig **#{giveaway_id}** creat!",
+                f"✅ ¡Sorteo **#{giveaway_id}** creado!",
                 ephemeral=True
             )
 
         except Exception as error:
 
             print(
-                "❌ ERROR CREANT GIVEAWAY:"
+                "❌ ERROR CREANDO EL SORTEO:"
             )
 
             print(
@@ -1091,15 +1090,15 @@ class Giveaways(
             )
 
             await interaction.followup.send(
-                "❌ Hi ha hagut un error creant "
-                "el sorteig.\n"
-                "Mira la consola del bot per veure "
-                "l'error.",
+                "❌ Ha habido un error creando "
+                "el sorteo.\n"
+                "Mira la consola del bot para ver "
+                "el error.",
                 ephemeral=True
             )
 
     # ========================================================
-    # END GIVEAWAY
+    # FINALIZAR SORTEO
     # ========================================================
 
     async def end_giveaway(
@@ -1194,7 +1193,7 @@ class Giveaways(
             except Exception as error:
 
                 print(
-                    f"❌ No puc trobar canal: {error}"
+                    f"❌ No puedo encontrar el canal: {error}"
                 )
 
                 return
@@ -1208,13 +1207,13 @@ class Giveaways(
         except Exception as error:
 
             print(
-                f"❌ No puc trobar missatge: {error}"
+                f"❌ No puedo encontrar el mensaje: {error}"
             )
 
             return
 
         # ====================================================
-        # SENSE PARTICIPANTS
+        # SIN PARTICIPANTES
         # ====================================================
 
         if not participants:
@@ -1224,22 +1223,22 @@ class Giveaways(
             )
 
             embed.description = (
-                "# 🎉 SORTEIG FINALITZAT\n\n"
-                "### ❌ No hi ha hagut participants.\n\n"
-                f"**Premi:** {prize}"
+                "# 🎉 SORTEO FINALIZADO\n\n"
+                "### ❌ No ha habido participantes.\n\n"
+                f"**Premio:** {prize}"
             )
 
             if late:
 
                 embed.description += (
                     "\n\n"
-                    "⚠️ **Disculpes pel retard!**\n"
-                    "El bot estava tancat quan "
-                    "el sorteig havia de finalitzar."
+                    "⚠️ **¡Disculpas por el retraso!**\n"
+                    "El bot estaba cerrado cuando "
+                    "el sorteo debía finalizar."
                 )
 
             embed.set_footer(
-                text=f"Sorteig #{giveaway_id}"
+                text=f"Sorteo #{giveaway_id}"
             )
 
             await message.edit(
@@ -1250,7 +1249,7 @@ class Giveaways(
             return
 
         # ====================================================
-        # GUANYADORS
+        # GANADORES
         # ====================================================
 
         winner_count = min(
@@ -1287,7 +1286,7 @@ class Giveaways(
         connection.close()
 
         # ====================================================
-        # MENCIONS
+        # MENCIONES
         # ====================================================
 
         winner_mentions = "\n".join(
@@ -1304,25 +1303,25 @@ class Giveaways(
         )
 
         embed.description = (
-            "# 🎉 SORTEIG FINALITZAT\n\n"
-            "### 🏆 Felicitats als guanyadors!\n\n"
+            "# 🎉 SORTEO FINALIZADO\n\n"
+            "### 🏆 ¡Felicidades a los ganadores!\n\n"
             f"{winner_mentions}\n\n"
-            f"🎁 **Premi:** {prize}\n\n"
-            "🎫 **Podeu obrir un ticket per "
-            "reclamar el vostre premi.**"
+            f"🎁 **Premio:** {prize}\n\n"
+            "🎫 **Podéis abrir un ticket para "
+            "reclamar vuestro premio.**"
         )
 
         if late:
 
             embed.description += (
                 "\n\n"
-                "⚠️ **Disculpes pel retard!**\n"
-                "El bot estava tancat quan "
-                "el sorteig havia de finalitzar."
+                "⚠️ **¡Disculpas por el retraso!**\n"
+                "El bot estaba cerrado cuando "
+                "el sorteo debía finalizar."
             )
 
         embed.set_footer(
-            text=f"Sorteig #{giveaway_id}"
+            text=f"Sorteo #{giveaway_id}"
         )
 
         await message.edit(
@@ -1331,7 +1330,7 @@ class Giveaways(
         )
 
         # ====================================================
-        # AVÍS AL SERVIDOR
+        # AVISO EN EL SERVIDOR
         # ====================================================
 
         mentions = " ".join(
@@ -1340,15 +1339,15 @@ class Giveaways(
         )
 
         await channel.send(
-            f"# 🎉 SORTEIG FINALITZAT\n\n"
-            f"🏆 **Enhorabona als guanyadors!**\n\n"
+            f"# 🎉 SORTEO FINALIZADO\n\n"
+            f"🏆 **¡Enhorabuena a los ganadores!**\n\n"
             f"{mentions}\n\n"
-            f"🎁 Heu guanyat **{prize}**!\n"
-            f"🎫 Obriu un ticket per reclamar el vostre premi."
+            f"🎁 ¡Habéis ganado **{prize}**!\n"
+            f"🎫 Abrid un ticket para reclamar vuestro premio."
         )
 
         # ====================================================
-        # AVÍS PER MD
+        # AVISO POR MD (MENSAJE PRIVADO)
         # ====================================================
 
         for user_id in winners:
@@ -1366,7 +1365,7 @@ class Giveaways(
                     )
 
                 # --------------------------------------------
-                # EMBED PRIVAT
+                # EMBED PRIVADO
                 # --------------------------------------------
 
                 dm_embed = discord.Embed(
@@ -1374,20 +1373,20 @@ class Giveaways(
                 )
 
                 dm_embed.description = (
-                    "# 🏆 ENHORABONA!\n\n"
-                    f"Has guanyat el sorteig "
+                    "# 🏆 ¡ENHORABUENA!\n\n"
+                    f"¡Has ganado el sorteo "
                     f"**#{giveaway_id}** de **RebirthMC Network**!\n\n"
-                    f"🎁 **Premi**\n"
+                    f"🎁 **Premio**\n"
                     f"```{prize}```\n\n"
-                    "🎫 **Com reclamar el premi?**\n"
-                    "Obre un ticket al servidor i indica "
-                    "que has guanyat aquest sorteig.\n\n"
-                    f"🏆 **Sorteig:** #{giveaway_id}\n"
-                    "⏰ **No t'oblidis de reclamar-lo!**"
+                    "🎫 **¿Cómo reclamar el premio?**\n"
+                    "Abre un ticket en el servidor e indica "
+                    "que has ganado este sorteo.\n\n"
+                    f"🏆 **Sorteo:** #{giveaway_id}\n"
+                    "⏰ **¡No te olvides de reclamarlo!**"
                 )
 
                 dm_embed.set_footer(
-                    text="RebirthMC Network • Giveaways"
+                    text="RebirthMC Network • Sorteos"
                 )
 
                 dm_view = ClaimPrizeView()
@@ -1398,29 +1397,29 @@ class Giveaways(
                 )
 
                 print(
-                    f"📩 MD enviat a {user} "
-                    f"pel giveaway #{giveaway_id}."
+                    f"📩 MD enviado a {user} "
+                    f"por el sorteo #{giveaway_id}."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"⚠️ No puc enviar MD a "
-                    f"{user_id}: els missatges privats "
-                    f"estan tancats."
+                    f"⚠️ No puedo enviar MD a "
+                    f"{user_id}: los mensajes privados "
+                    f"están cerrados."
                 )
 
             except discord.HTTPException as error:
 
                 print(
-                    f"❌ Error enviant MD a "
+                    f"❌ Error enviando MD a "
                     f"{user_id}: {error}"
                 )
 
             except Exception as error:
 
                 print(
-                    f"❌ Error inesperat enviant "
+                    f"❌ Error inesperado enviando "
                     f"MD a {user_id}: {error}"
                 )
 
@@ -1430,13 +1429,13 @@ class Giveaways(
 
     @app_commands.command(
         name="end",
-        description="Finalitza un sorteig immediatament."
+        description="Finaliza un sorteo inmediatamente."
     )
     @app_commands.default_permissions(
         manage_guild=True
     )
     @app_commands.describe(
-        giveaway_id="ID del sorteig"
+        giveaway_id="ID del sorteo"
     )
     async def end(
         self,
@@ -1469,7 +1468,7 @@ class Giveaways(
         if result is None:
 
             await interaction.followup.send(
-                "❌ No existeix aquest sorteig.",
+                "❌ No existe este sorteo.",
                 ephemeral=True
             )
 
@@ -1480,7 +1479,7 @@ class Giveaways(
         if guild_id != interaction.guild.id:
 
             await interaction.followup.send(
-                "❌ Aquest sorteig no és d'aquest servidor.",
+                "❌ Este sorteo no es de este servidor.",
                 ephemeral=True
             )
 
@@ -1489,7 +1488,7 @@ class Giveaways(
         if ended:
 
             await interaction.followup.send(
-                "❌ Aquest sorteig ja ha finalitzat.",
+                "❌ Este sorteo ya ha finalizado.",
                 ephemeral=True
             )
 
@@ -1500,7 +1499,7 @@ class Giveaways(
         )
 
         await interaction.followup.send(
-            f"🛑 Sorteig **#{giveaway_id}** finalitzat.",
+            f"🛑 Sorteo **#{giveaway_id}** finalizado.",
             ephemeral=True
         )
 
@@ -1510,14 +1509,14 @@ class Giveaways(
 
     @app_commands.command(
         name="reroll",
-        description="Escull nous guanyadors."
+        description="Elige nuevos ganadores."
     )
     @app_commands.default_permissions(
         manage_guild=True
     )
     @app_commands.describe(
-        giveaway_id="ID del sorteig",
-        winners="Nombre de nous guanyadors"
+        giveaway_id="ID del sorteo",
+        winners="Número de nuevos ganadores"
     )
     async def reroll(
         self,
@@ -1531,8 +1530,8 @@ class Giveaways(
         if winners < 1:
 
             await interaction.followup.send(
-                "❌ Hi ha d'haver almenys "
-                "un guanyador."
+                "❌ Debe haber al menos "
+                "un ganador."
             )
 
             return
@@ -1540,8 +1539,8 @@ class Giveaways(
         if winners > 50:
 
             await interaction.followup.send(
-                "❌ No pots escollir més de "
-                "**50 guanyadors**."
+                "❌ No puedes elegir más de "
+                "**50 ganadores**."
             )
 
             return
@@ -1570,7 +1569,7 @@ class Giveaways(
             connection.close()
 
             await interaction.followup.send(
-                "❌ No existeix aquest sorteig."
+                "❌ No existe este sorteo."
             )
 
             return
@@ -1586,8 +1585,8 @@ class Giveaways(
             connection.close()
 
             await interaction.followup.send(
-                "❌ Aquest sorteig no és "
-                "d'aquest servidor."
+                "❌ Este sorteo no es "
+                "de este servidor."
             )
 
             return
@@ -1597,7 +1596,7 @@ class Giveaways(
             connection.close()
 
             await interaction.followup.send(
-                "❌ El sorteig encara no ha acabat."
+                "❌ El sorteo todavía no ha terminado."
             )
 
             return
@@ -1645,8 +1644,8 @@ class Giveaways(
         if not available:
 
             await interaction.followup.send(
-                "❌ No queden participants "
-                "que no hagin guanyat anteriorment."
+                "❌ No quedan participantes "
+                "que no hayan ganado anteriormente."
             )
 
             return
@@ -1688,18 +1687,18 @@ class Giveaways(
         )
 
         # ----------------------------------------------------
-        # AVÍS SERVER
+        # AVISO SERVIDOR
         # ----------------------------------------------------
 
         await interaction.followup.send(
             f"# 🔄 REROLL\n\n"
-            f"🎉 Nou(s) guanyador(s):\n"
+            f"🎉 Nuevo(s) ganador(es):\n"
             f"{mentions}\n\n"
-            f"🎁 Premi: **{prize}**"
+            f"🎁 Premio: **{prize}**"
         )
 
         # ----------------------------------------------------
-        # AVÍS MD
+        # AVISO MD
         # ----------------------------------------------------
 
         for user_id in winners:
@@ -1721,21 +1720,21 @@ class Giveaways(
                 )
 
                 dm_embed.description = (
-                    "# 🎉 HAS GUANYAT!\n\n"
-                    "Has estat escollit com a "
-                    "**nou guanyador** en el reroll "
-                    f"del sorteig **#{giveaway_id}**!\n\n"
-                    f"🎁 **Premi**\n"
+                    "# 🎉 ¡HAS GANADO!\n\n"
+                    "Has sido elegido como "
+                    "**nuevo ganador** en el reroll "
+                    f"del sorteo **#{giveaway_id}**!\n\n"
+                    f"🎁 **Premio**\n"
                     f"```{prize}```\n\n"
-                    "🎫 **Per reclamar-lo**\n"
-                    "Obre un ticket al servidor i indica "
-                    f"que has guanyat el sorteig "
+                    "🎫 **Para reclamarlo**\n"
+                    "Abre un ticket en el servidor e indica "
+                    f"que has ganado el sorteo "
                     f"**#{giveaway_id}**.\n\n"
-                    "⚡ No t'oblidis de reclamar el premi!"
+                    "⚡ ¡No te olvides de reclamar el premio!"
                 )
 
                 dm_embed.set_footer(
-                    text="RebirthMC Network • Giveaway Reroll"
+                    text="RebirthMC Network • Reroll de Sorteo"
                 )
 
                 await user.send(
@@ -1744,20 +1743,20 @@ class Giveaways(
                 )
 
                 print(
-                    f"📩 MD de reroll enviat a "
-                    f"{user} pel giveaway #{giveaway_id}."
+                    f"📩 MD de reroll enviado a "
+                    f"{user} por el sorteo #{giveaway_id}."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"⚠️ No puc enviar MD a {user_id}."
+                    f"⚠️ No puedo enviar MD a {user_id}."
                 )
 
             except Exception as error:
 
                 print(
-                    f"❌ Error enviant MD de reroll "
+                    f"❌ Error enviando MD de reroll "
                     f"a {user_id}: {error}"
                 )
 
@@ -1767,7 +1766,7 @@ class Giveaways(
 
     @app_commands.command(
         name="giveawaylist",
-        description="Mostra els sorteigs actius."
+        description="Muestra los sorteos activos."
     )
     @app_commands.default_permissions(
         manage_guild=True
@@ -1809,14 +1808,14 @@ class Giveaways(
         if not giveaways:
 
             await interaction.followup.send(
-                "📋 No hi ha cap sorteig actiu.",
+                "📋 No hay ningún sorteo activo.",
                 ephemeral=True
             )
 
             return
 
         embed = discord.Embed(
-            title="🎁 Sorteigs actius",
+            title="🎁 Sorteos activos",
             color=GIVEAWAY_COLOR
         )
 
@@ -1850,13 +1849,13 @@ class Giveaways(
 
             embed.add_field(
                 name=(
-                    f"🎁 Sorteig #{giveaway_id} "
+                    f"🎁 Sorteo #{giveaway_id} "
                     f"— {prize}"
                 ),
                 value=(
-                    f"👥 Participants: **{count}**\n"
-                    f"🏆 Guanyadors: **{winners}**\n"
-                    f"⏰ Acaba: "
+                    f"👥 Participantes: **{count}**\n"
+                    f"🏆 Ganadores: **{winners}**\n"
+                    f"⏰ Termina: "
                     f"<t:{end_time}:R>\n"
                     f"📍 Canal: {channel_text}"
                 ),
@@ -1864,7 +1863,7 @@ class Giveaways(
             )
 
         embed.set_footer(
-            text="Sistema de Giveaways"
+            text="Sistema de Sorteos"
         )
 
         await interaction.followup.send(
@@ -1874,7 +1873,7 @@ class Giveaways(
 
 
 # ============================================================
-# SETUP
+# CONFIGURACIÓN DE INICIO (SETUP)
 # ============================================================
 
 async def setup(bot):
@@ -1882,4 +1881,3 @@ async def setup(bot):
     await bot.add_cog(
         Giveaways(bot)
     )
-

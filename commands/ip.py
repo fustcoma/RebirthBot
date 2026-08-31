@@ -45,7 +45,7 @@ class IP(commands.Cog):
         if not IP_ENABLED:
 
             await interaction.response.send_message(
-                "❌ El comandament /ip està desactivat.",
+                "❌ El comando /ip está desactivado.",
                 ephemeral=True
             )
 
@@ -60,8 +60,8 @@ class IP(commands.Cog):
             if not interaction.user.guild_permissions.administrator:
 
                 await interaction.response.send_message(
-                    "❌ Només els administradors poden "
-                    "utilitzar aquest comandament.",
+                    "❌ Solo los administradores pueden "
+                    "utilizar este comando.",
                     ephemeral=True
                 )
 
@@ -72,24 +72,24 @@ class IP(commands.Cog):
         # ----------------------------------------------------
 
         embed = discord.Embed(
-            title="🖥️ INFORMACIÓ DEL SERVIDOR",
+            title="🖥️ INFORMACIÓN DEL SERVIDOR",
             color=discord.Color.blurple()
         )
 
         embed.add_field(
             name="🌐 RadminVPN",
             value=(
-                "**Usuari:** `aleixpeix`\n"
-                "**Contrasenya:** `julian`"
+                "**Usuario:** `aleixpeix`\n"
+                "**Contraseña:** `julian`"
             ),
             inline=False
         )
 
         embed.add_field(
-            name="🔌 Connexió",
+            name="🔌 Conexión",
             value=(
                 "**IP:** `26.89.63.157`\n"
-                "**Versió:** `1.8.x`"
+                "**Versión:** `1.8.x`"
             ),
             inline=False
         )

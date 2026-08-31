@@ -1,4 +1,3 @@
-
 import re
 import time
 from collections import defaultdict, deque
@@ -12,18 +11,16 @@ from events.logs import send_log
 
 
 # ============================================================
-# CONFIGURACIÓ
+# CONFIGURACIÓN
 # ============================================================
 
 
 # ============================================================
-# PARAULES PROHIBIDES
+# PALABRAS PROHIBIDAS
 # ============================================================
 
 BANNED_WORDS = {
-    "nigga",
-    "niggers",
-    "nigger",
+    "puta",
 }
 
 
@@ -32,7 +29,7 @@ WARN_BANNED_WORDS = True
 
 
 # ============================================================
-# ANTI-LINKS
+# ANTI-ENLACES
 # ============================================================
 
 ANTI_LINKS_ENABLED = True
@@ -40,7 +37,7 @@ DELETE_LINK_MESSAGES = True
 WARN_LINKS = True
 
 
-# Dominis permesos
+# Dominios permitidos
 
 ALLOWED_LINK_DOMAINS = {
     "youtube.com",
@@ -55,10 +52,10 @@ ALLOWED_LINK_DOMAINS = {
 
 ANTI_SPAM_ENABLED = True
 
-# Quants missatges iguals detectem
+# Cuántos mensajes iguales detectamos
 SPAM_MESSAGE_COUNT = 3
 
-# En quants segons
+# En cuántos segundos
 SPAM_TIME_WINDOW = 6
 
 
@@ -68,24 +65,24 @@ SPAM_TIME_WINDOW = 6
 
 ANTI_FLOOD_ENABLED = True
 
-# Nombre màxim de missatges
+# Número máximo de mensajes
 FLOOD_MESSAGE_COUNT = 6
 
-# En aquesta quantitat de segons
+# En esta cantidad de segundos
 FLOOD_TIME_WINDOW = 5
 
 
 # ============================================================
-# COOLDOWN D'INCIDENT
+# ENFRIAMIENTO DE INCIDENTE
 # ============================================================
 
-# Temps durant el qual no crearem un altre incident
-# per al mateix usuari.
+# Tiempo durante el cual no crearemos otro incidente
+# para el mismo usuario.
 INCIDENT_COOLDOWN = 8
 
 
 # ============================================================
-# WARN AUTOMÀTIC
+# WARN AUTOMÁTICO
 # ============================================================
 
 WARN_TIMEOUT_AT = 5
@@ -95,7 +92,7 @@ WARN_KICK_AT = 6
 
 
 # ============================================================
-# MISSATGE PÚBLIC
+# MENSAJE PÚBLICO
 # ============================================================
 
 SEND_PUBLIC_WARN_MESSAGE = True
@@ -104,7 +101,7 @@ PUBLIC_WARN_DELETE_AFTER = 8
 
 
 # ============================================================
-# LOGS
+# REGISTROS (LOGS)
 # ============================================================
 
 AUTOMOD_LOGS_ENABLED = True
@@ -121,7 +118,7 @@ class AutoMod(commands.Cog):
         self.bot = bot
 
         # ----------------------------------------------------
-        # Historial de missatges per usuari
+        # Historial de mensajes por usuario
         # ----------------------------------------------------
 
         self.user_messages = defaultdict(
@@ -129,24 +126,24 @@ class AutoMod(commands.Cog):
         )
 
         # ----------------------------------------------------
-        # Últim incident de cada usuari
+        # Último incidente de cada usuario
         # ----------------------------------------------------
 
         self.last_incident = {}
 
         # ----------------------------------------------------
-        # Evita processar simultàniament el mateix usuari
+        # Evita procesar simultáneamente el mismo usuario
         # ----------------------------------------------------
 
         self.processing_users = set()
 
         print(
-            "🛡️ AutoMod carregat correctament."
+            "🛡️ AutoMod cargado correctamente."
         )
 
 
     # ========================================================
-    # JERARQUIA
+    # JERARQUÍA
     # ========================================================
 
     def can_moderate(
@@ -163,15 +160,15 @@ class AutoMod(commands.Cog):
         if bot_member is None:
             return False
 
-        # Propietari
+        # Propietario
         if member.id == message.guild.owner_id:
             return False
 
-        # Mateix bot
+        # Mismo bot
         if member.id == bot_member.id:
             return False
 
-        # Jerarquia
+        # Jerarquía
         if member.top_role >= bot_member.top_role:
             return False
 
@@ -179,7 +176,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # PARAULES PROHIBIDES
+    # PALABRAS PROHIBIDAS
     # ========================================================
 
     def find_banned_word(
@@ -196,7 +193,7 @@ class AutoMod(commands.Cog):
             if not word:
                 continue
 
-            # Paraules molt curtes
+            # Palabras muy cortas
             if len(word) <= 3:
 
                 if word in content_lower:
@@ -216,7 +213,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # DETECTAR LINKS
+    # DETECTAR ENLACES
     # ========================================================
 
     def find_link(
@@ -226,7 +223,7 @@ class AutoMod(commands.Cog):
 
         normalized = content.lower()
 
-        # Intentos senzills d'amagar dominis
+        # Intentos sencillos de ocultar dominios
 
         normalized = normalized.replace(
             "[.]",
@@ -274,7 +271,7 @@ class AutoMod(commands.Cog):
         if domain is None:
             return url
 
-        # Whitelist
+        # Lista blanca (Whitelist)
 
         for allowed_domain in ALLOWED_LINK_DOMAINS:
 
@@ -296,7 +293,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # EXTREURE DOMINI
+    # EXTRAER DOMINIO
     # ========================================================
 
     def extract_domain(
@@ -345,7 +342,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # AFEGIR MISSATGE A L'HISTORIAL
+    # AÑADIR MENSAJE AL HISTORIAL
     # ========================================================
 
     def register_message(
@@ -369,7 +366,7 @@ class AutoMod(commands.Cog):
             )
         )
 
-        # Netejar missatges antics
+        # Limpiar mensajes antiguos
 
         history = self.user_messages[key]
 
@@ -481,7 +478,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # COOLDOWN D'INCIDENT
+    # ENFRIAMIENTO DE INCIDENTE
     # ========================================================
 
     def incident_on_cooldown(
@@ -511,7 +508,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # AFEGIR WARN
+    # AÑADIR WARN
     # ========================================================
 
     async def add_warning(
@@ -572,7 +569,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # ACCIONS AUTOMÀTIQUES
+    # ACCIONES AUTOMÁTICAS
     # ========================================================
 
     async def automatic_action(
@@ -608,20 +605,20 @@ class AutoMod(commands.Cog):
 
                 print(
                     f"⏱️ AutoMod: {member} "
-                    f"ha rebut timeout."
+                    f"ha recibido timeout."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"❌ No puc fer timeout "
+                    f"❌ No puedo aplicar timeout "
                     f"a {member}."
                 )
 
             except Exception as error:
 
                 print(
-                    f"❌ Error fent timeout: "
+                    f"❌ Error aplicando timeout: "
                     f"{error}"
                 )
 
@@ -645,20 +642,20 @@ class AutoMod(commands.Cog):
 
                 print(
                     f"👢 AutoMod: {member} "
-                    f"ha estat expulsat."
+                    f"ha sido expulsado."
                 )
 
             except discord.Forbidden:
 
                 print(
-                    f"❌ No puc expulsar "
-                    f"{member}."
+                    f"❌ No puedo expulsar "
+                    f"a {member}."
                 )
 
             except Exception as error:
 
                 print(
-                    f"❌ Error expulsant: "
+                    f"❌ Error expulsando: "
                     f"{error}"
                 )
 
@@ -670,7 +667,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # ESBORRAR MISSATGES DE L'INCIDENT
+    # BORRAR MENSAJES DEL INCIDENTE
     # ========================================================
 
     async def delete_messages(
@@ -686,8 +683,8 @@ class AutoMod(commands.Cog):
 
         try:
 
-            # Intentem obtenir els missatges
-            # abans de fer la purga.
+            # Intentamos obtener los mensajes
+            # antes de hacer la purga.
 
             messages = []
 
@@ -712,8 +709,8 @@ class AutoMod(commands.Cog):
             if not messages:
                 return 0
 
-            # purge() agrupa les eliminacions
-            # i redueix molt les peticions.
+            # purge() agrupa las eliminaciones
+            # y reduce mucho las peticiones.
 
             deleted_messages = await channel.purge(
                 limit=len(messages),
@@ -735,14 +732,14 @@ class AutoMod(commands.Cog):
         except discord.Forbidden:
 
             print(
-                "❌ AutoMod no té permisos "
-                "per eliminar missatges."
+                "❌ AutoMod no tiene permisos "
+                "para eliminar mensajes."
             )
 
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error eliminant missatges: "
+                f"❌ Error eliminando mensajes: "
                 f"{error}"
             )
 
@@ -750,7 +747,7 @@ class AutoMod(commands.Cog):
 
 
     # ========================================================
-    # MISSATGE PÚBLIC DE WARN
+    # MENSAJE PÚBLICO DE WARN
     # ========================================================
 
     async def send_public_warning(
@@ -767,37 +764,37 @@ class AutoMod(commands.Cog):
 
             text = (
                 f"⚠️ {message.author.mention}, "
-                f"has rebut un **warn** per spam."
+                f"has recibido un **warn** por spam."
             )
 
         elif reason == "flood":
 
             text = (
                 f"⚠️ {message.author.mention}, "
-                f"has rebut un **warn** per flood."
+                f"has recibido un **warn** por flood."
             )
 
         elif reason == "link":
 
             text = (
                 f"⚠️ {message.author.mention}, "
-                f"has rebut un **warn** per enviar "
-                f"un link no permès."
+                f"has recibido un **warn** por enviar "
+                f"un enlace no permitido."
             )
 
         elif reason == "banned_word":
 
             text = (
                 f"⚠️ {message.author.mention}, "
-                f"has rebut un **warn** per utilitzar "
-                f"una paraula prohibida."
+                f"has recibido un **warn** por utilizar "
+                f"una palabra prohibida."
             )
 
         else:
 
             text = (
                 f"⚠️ {message.author.mention}, "
-                f"has rebut un **warn**."
+                f"has recibido un **warn**."
             )
 
         if warning_count >= WARN_TIMEOUT_AT:
@@ -805,10 +802,10 @@ class AutoMod(commands.Cog):
             if warning_count == WARN_TIMEOUT_AT:
 
                 text += (
-                    f"\n⏱️ Has arribat als "
+                    f"\n⏱️ Has llegado a los "
                     f"**{WARN_TIMEOUT_AT} warns** "
-                    f"i has rebut un timeout de "
-                    f"**{WARN_TIMEOUT_MINUTES} minuts**."
+                    f"y has recibido un timeout de "
+                    f"**{WARN_TIMEOUT_MINUTES} minutos**."
                 )
 
         try:
@@ -826,7 +823,7 @@ class AutoMod(commands.Cog):
         except discord.HTTPException as error:
 
             print(
-                f"❌ Error enviant warn públic: "
+                f"❌ Error enviando warn público: "
                 f"{error}"
             )
 
@@ -859,13 +856,13 @@ class AutoMod(commands.Cog):
         except Exception as error:
 
             print(
-                f"❌ Error enviant log: "
+                f"❌ Error enviando log: "
                 f"{error}"
             )
 
 
     # ========================================================
-    # PROCESSAR INCIDENT
+    # PROCESAR INCIDENTE
     # ========================================================
 
     async def process_incident(
@@ -886,20 +883,20 @@ class AutoMod(commands.Cog):
             member.id
         )
 
-        # Evitar dues tasques simultànies
+        # Evitar dos tareas simultáneas
 
         if key in self.processing_users:
             return
 
-        # Un únic incident
+        # Un único incidente
 
         if self.incident_on_cooldown(
             guild.id,
             member.id
         ):
             print(
-                f"ℹ️ AutoMod: incident duplicat "
-                f"ignorat per {member}."
+                f"ℹ️ AutoMod: incidente duplicado "
+                f"ignorado para {member}."
             )
             return
 
@@ -910,7 +907,7 @@ class AutoMod(commands.Cog):
         try:
 
             # ------------------------------------------------
-            # ELIMINAR MISSATGES
+            # ELIMINAR MENSAJES
             # ------------------------------------------------
 
             if message_ids:
@@ -921,8 +918,8 @@ class AutoMod(commands.Cog):
                 )
 
                 print(
-                    f"🗑️ AutoMod ha eliminat "
-                    f"{deleted} missatges."
+                    f"🗑️ AutoMod ha eliminado "
+                    f"{deleted} mensajes."
                 )
 
 
@@ -945,19 +942,19 @@ class AutoMod(commands.Cog):
             elif reason == "link":
 
                 warn_reason = (
-                    "AutoMod: link no permès"
+                    "AutoMod: enlace no permitido"
                 )
 
             elif reason == "banned_word":
 
                 warn_reason = (
-                    "AutoMod: paraula prohibida"
+                    "AutoMod: palabra prohibida"
                 )
 
             else:
 
                 warn_reason = (
-                    "AutoMod: infracció"
+                    "AutoMod: infracción"
                 )
 
 
@@ -976,7 +973,7 @@ class AutoMod(commands.Cog):
 
 
             # ------------------------------------------------
-            # ACCIONS AUTOMÀTIQUES
+            # ACCIONES AUTOMÁTICAS
             # ------------------------------------------------
 
             (
@@ -990,7 +987,7 @@ class AutoMod(commands.Cog):
 
 
             # ------------------------------------------------
-            # MISSATGE PÚBLIC
+            # MENSAJE PÚBLICO
             # ------------------------------------------------
 
             await self.send_public_warning(
@@ -1013,22 +1010,22 @@ class AutoMod(commands.Cog):
                     "Flood",
 
                 "link":
-                    "Link no permès",
+                    "Enlace no permitido",
 
                 "banned_word":
-                    "Paraula prohibida"
+                    "Palabra prohibida"
             }
 
             reason_name = reason_names.get(
                 reason,
-                "Infracció"
+                "Infracción"
             )
 
 
             log_fields = [
 
                 (
-                    "👤 Usuari",
+                    "👤 Usuario",
                     f"{member} (`{member.id}`)",
                     False
                 ),
@@ -1040,7 +1037,7 @@ class AutoMod(commands.Cog):
                 ),
 
                 (
-                    "🚨 Motiu",
+                    "🚨 Motivo",
                     reason_name,
                     True
                 ),
@@ -1057,7 +1054,7 @@ class AutoMod(commands.Cog):
 
                 log_fields.append(
                     (
-                        "🗑️ Missatges eliminats",
+                        "🗑️ Mensajes eliminados",
                         str(len(message_ids)),
                         True
                     )
@@ -1069,7 +1066,7 @@ class AutoMod(commands.Cog):
                 log_fields.append(
                     (
                         "⏱️ Timeout",
-                        f"{WARN_TIMEOUT_MINUTES} minuts",
+                        f"{WARN_TIMEOUT_MINUTES} minutos",
                         False
                     )
                 )
@@ -1090,7 +1087,7 @@ class AutoMod(commands.Cog):
                 f"🛡️ AutoMod — {reason_name}",
                 (
                     f"{member.mention} "
-                    f"ha infringit les normes."
+                    f"ha infringido las normas."
                 ),
                 discord.Color.red(),
                 log_fields
@@ -1141,7 +1138,7 @@ class AutoMod(commands.Cog):
 
 
         # ----------------------------------------------------
-        # JERARQUIA
+        # JERARQUÍA
         # ----------------------------------------------------
 
         if not self.can_moderate(
@@ -1151,7 +1148,7 @@ class AutoMod(commands.Cog):
 
 
         # ----------------------------------------------------
-        # REGISTRAR MISSATGE
+        # REGISTRAR MENSAJE
         # ----------------------------------------------------
 
         self.register_message(
@@ -1160,7 +1157,7 @@ class AutoMod(commands.Cog):
 
 
         # ====================================================
-        # PARAULES PROHIBIDES
+        # PALABRAS PROHIBIDAS
         # ====================================================
 
         banned_word = self.find_banned_word(
@@ -1170,7 +1167,7 @@ class AutoMod(commands.Cog):
         if banned_word is not None:
 
             print(
-                f"🚨 Paraula prohibida: "
+                f"🚨 Palabra prohibida: "
                 f"{banned_word}"
             )
 
@@ -1181,7 +1178,7 @@ class AutoMod(commands.Cog):
                     await message.delete()
 
                     print(
-                        "🗑️ Missatge eliminat."
+                        "🗑️ Mensaje eliminado."
                     )
 
                 except discord.NotFound:
@@ -1191,8 +1188,8 @@ class AutoMod(commands.Cog):
                 except discord.Forbidden:
 
                     print(
-                        "❌ No puc eliminar "
-                        "el missatge."
+                        "❌ No puedo eliminar "
+                        "el mensaje."
                     )
 
             if WARN_BANNED_WORDS:
@@ -1206,7 +1203,7 @@ class AutoMod(commands.Cog):
 
 
         # ====================================================
-        # ANTI-LINKS
+        # ANTI-ENLACES
         # ====================================================
 
         if ANTI_LINKS_ENABLED:
@@ -1218,7 +1215,7 @@ class AutoMod(commands.Cog):
             if link is not None:
 
                 print(
-                    f"🔗 Link detectat: "
+                    f"🔗 Enlace detectado: "
                     f"{link}"
                 )
 
@@ -1233,7 +1230,7 @@ class AutoMod(commands.Cog):
                         await message.delete()
 
                         print(
-                            "🗑️ Link eliminat."
+                            "🗑️ Enlace eliminado."
                         )
 
                     except discord.NotFound:
@@ -1243,8 +1240,8 @@ class AutoMod(commands.Cog):
                     except discord.Forbidden:
 
                         print(
-                            "❌ No puc eliminar "
-                            "el link."
+                            "❌ No puedo eliminar "
+                            "el enlace."
                         )
 
 
@@ -1274,7 +1271,7 @@ class AutoMod(commands.Cog):
             if spam_detected:
 
                 print(
-                    f"🚨 Spam detectat: "
+                    f"🚨 Spam detectado: "
                     f"{message.author}"
                 )
 
@@ -1302,7 +1299,7 @@ class AutoMod(commands.Cog):
             if flood_detected:
 
                 print(
-                    f"🚨 Flood detectat: "
+                    f"🚨 Flood detectado: "
                     f"{message.author}"
                 )
 
@@ -1343,7 +1340,7 @@ class AutoMod(commands.Cog):
 
 
         # ----------------------------------------------------
-        # Només si el contingut ha canviat
+        # Solo si el contenido ha cambiado
         # ----------------------------------------------------
 
         if before.content == after.content:
@@ -1351,7 +1348,7 @@ class AutoMod(commands.Cog):
 
 
         # ----------------------------------------------------
-        # Jerarquia
+        # Jerarquía
         # ----------------------------------------------------
 
         if not self.can_moderate(
@@ -1362,13 +1359,13 @@ class AutoMod(commands.Cog):
 
         print(
             f"✏️ AutoMod: "
-            f"{after.author} ha editat "
-            f"un missatge."
+            f"{after.author} ha editado "
+            f"un mensaje."
         )
 
 
         # ====================================================
-        # PARAULA PROHIBIDA
+        # PALABRA PROHIBIDA
         # ====================================================
 
         banned_word = self.find_banned_word(
@@ -1378,8 +1375,8 @@ class AutoMod(commands.Cog):
         if banned_word is not None:
 
             print(
-                f"🚨 Paraula prohibida "
-                f"detectada en edició: "
+                f"🚨 Palabra prohibida "
+                f"detectada en edición: "
                 f"{banned_word}"
             )
 
@@ -1388,7 +1385,7 @@ class AutoMod(commands.Cog):
                 await after.delete()
 
                 print(
-                    "🗑️ Missatge editat eliminat."
+                    "🗑️ Mensaje editado eliminado."
                 )
 
             except discord.NotFound:
@@ -1398,8 +1395,8 @@ class AutoMod(commands.Cog):
             except discord.Forbidden:
 
                 print(
-                    "❌ No puc eliminar "
-                    "el missatge editat."
+                    "❌ No puedo eliminar "
+                    "el mensaje editado."
                 )
 
             await self.process_incident(
@@ -1411,7 +1408,7 @@ class AutoMod(commands.Cog):
 
 
         # ====================================================
-        # LINK
+        # ENLACE
         # ====================================================
 
         if ANTI_LINKS_ENABLED:
@@ -1423,8 +1420,8 @@ class AutoMod(commands.Cog):
             if link is not None:
 
                 print(
-                    f"🔗 Link detectat "
-                    f"en edició: {link}"
+                    f"🔗 Enlace detectado "
+                    f"en edición: {link}"
                 )
 
                 try:
@@ -1432,7 +1429,7 @@ class AutoMod(commands.Cog):
                     await after.delete()
 
                     print(
-                        "🗑️ Link editat eliminat."
+                        "🗑️ Enlace editado eliminado."
                     )
 
                 except discord.NotFound:
@@ -1442,8 +1439,8 @@ class AutoMod(commands.Cog):
                 except discord.Forbidden:
 
                     print(
-                        "❌ No puc eliminar "
-                        "el link editat."
+                        "❌ No puedo eliminar "
+                        "el enlace editado."
                     )
 
                 await self.process_incident(
@@ -1456,7 +1453,7 @@ class AutoMod(commands.Cog):
 
 
 # ============================================================
-# SETUP
+# CONFIGURACIÓN DE INICIO (SETUP)
 # ============================================================
 
 async def setup(bot):
@@ -1464,4 +1461,3 @@ async def setup(bot):
     await bot.add_cog(
         AutoMod(bot)
     )
-
