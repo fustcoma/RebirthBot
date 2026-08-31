@@ -675,73 +675,37 @@ class AutoMod(commands.Cog):
         channel: discord.TextChannel,
         message_ids
     ):
-
         if not message_ids:
             return 0
 
         deleted = 0
 
-        try:
+        for message_id in set(message_ids):
+            try:
+                message = await channel.fetch_message(
+                    message_id
+                )
 
-            # Intentamos obtener los mensajes
-            # antes de hacer la purga.
+                await message.delete()
 
-            messages = []
+                deleted += 1
 
-            for message_id in set(message_ids):
+            except discord.NotFound:
+                # El missatge ja no existeix
+                continue
 
-                try:
+            except discord.Forbidden:
+                print(
+                    "❌ AutoMod no té permisos "
+                    "per eliminar missatges."
+                )
+                break
 
-                    message = await channel.fetch_message(
-                        message_id
-                    )
-
-                    messages.append(
-                        message
-                    )
-
-                except (
-                    discord.NotFound,
-                    discord.Forbidden
-                ):
-                    continue
-
-            if not messages:
-                return 0
-
-            # purge() agrupa las eliminaciones
-            # y reduce mucho las peticiones.
-
-            deleted_messages = await channel.purge(
-                limit=len(messages),
-                check=lambda m: m.id in {
-                    msg.id
-                    for msg in messages
-                },
-                bulk=True
-            )
-
-            deleted = len(
-                deleted_messages
-            )
-
-        except discord.NotFound:
-
-            pass
-
-        except discord.Forbidden:
-
-            print(
-                "❌ AutoMod no tiene permisos "
-                "para eliminar mensajes."
-            )
-
-        except discord.HTTPException as error:
-
-            print(
-                f"❌ Error eliminando mensajes: "
-                f"{error}"
-            )
+            except discord.HTTPException as error:
+                print(
+                    f"❌ Error eliminant el missatge "
+                    f"{message_id}: {error}"
+                )
 
         return deleted
 
