@@ -13,7 +13,7 @@ POSTULACION_ENABLED = True
 STAFF_ROLE_ID = 1541007404588859442
 
 # Enlace de la solicitud
-APPLICATION_URL = "https://prova.cat/"
+APPLICATION_URL = "https://fustcoma.github.io/RebirthBot/postulacion.html"
 
 
 # ============================================================
