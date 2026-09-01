@@ -168,6 +168,11 @@ Si s'ha activat correctament, al principi de la terminal apareixerà alguna cosa
 
 El `(venv)` indica que l'entorn virtual està actiu.
 
+Si et dona error, prova de posar aquesta comanda i probar a fer un altre cop el `venv`
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 ---
 
 # 7. Instal·lar els requirements
@@ -192,11 +197,6 @@ i després:
 
 ```powershell
 py -m pip install -r requirements.txt
-```
-
-Si et dona error, prova de posar aquesta comanda i probar a fer un altre cop el `pip`
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 
