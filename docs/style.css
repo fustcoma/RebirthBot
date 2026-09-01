@@ -1,0 +1,569 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+:root {
+--background: #0d1117;
+--background-secondary: #161b22;
+--border: #30363d;
+--text: #f0f6fc;
+--text-secondary: #8b949e;
+--accent: #5865f2;
+--accent-hover: #4752c4;
+}
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+Helvetica,
+Arial,
+sans-serif;
+
+
+background: var(--background);
+color: var(--text);
+
+line-height: 1.7;
+
+min-height: 100vh;
+
+display: flex;
+flex-direction: column;
+
+
+}
+
+/* ============================================================
+NAVBAR
+============================================================ */
+
+.navbar {
+position: sticky;
+top: 0;
+z-index: 100;
+
+
+background: rgba(13, 17, 23, 0.92);
+
+border-bottom: 1px solid var(--border);
+
+backdrop-filter: blur(10px);
+
+
+}
+
+.nav-container {
+max-width: 1100px;
+
+
+margin: auto;
+
+padding: 18px 24px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 20px;
+
+
+}
+
+.logo {
+color: var(--text);
+
+
+text-decoration: none;
+
+font-size: 20px;
+
+font-weight: 700;
+
+
+}
+
+.logo:hover {
+color: var(--accent);
+}
+
+nav {
+display: flex;
+
+
+align-items: center;
+
+gap: 22px;
+
+
+}
+
+nav a {
+color: var(--text-secondary);
+
+
+text-decoration: none;
+
+font-size: 14px;
+
+transition: 0.2s;
+
+
+}
+
+nav a:hover {
+color: var(--text);
+}
+
+/* ============================================================
+HERO
+============================================================ */
+
+.hero {
+min-height: 520px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+text-align: center;
+
+padding: 80px 24px;
+
+background:
+    radial-gradient(
+        circle at top,
+        rgba(88, 101, 242, 0.20),
+        transparent 55%
+    );
+
+
+}
+
+.hero-content {
+max-width: 760px;
+}
+
+.badge {
+display: inline-block;
+
+
+padding: 6px 12px;
+
+margin-bottom: 18px;
+
+border: 1px solid rgba(88, 101, 242, 0.5);
+
+border-radius: 999px;
+
+background: rgba(88, 101, 242, 0.12);
+
+color: #aeb5ff;
+
+font-size: 13px;
+
+font-weight: 600;
+
+}
+
+.hero h1 {
+font-size: clamp(48px, 8vw, 82px);
+
+line-height: 1.05;
+
+margin-bottom: 22px;
+
+letter-spacing: -3px;
+
+
+}
+
+.hero p {
+color: var(--text-secondary);
+
+
+font-size: 19px;
+
+max-width: 650px;
+
+margin: auto auto 32px;
+
+
+}
+
+/* ============================================================
+BUTTONS
+============================================================ */
+
+.buttons {
+display: flex;
+
+justify-content: center;
+
+gap: 12px;
+
+flex-wrap: wrap;
+
+}
+
+.button {
+display: inline-block;
+
+padding: 11px 20px;
+
+border-radius: 8px;
+
+text-decoration: none;
+
+font-weight: 600;
+
+transition:
+    background 0.2s,
+    transform 0.2s;
+
+
+}
+
+.button:hover {
+transform: translateY(-2px);
+}
+
+.button.primary {
+background: var(--accent);
+
+color: white;
+
+}
+
+.button.primary:hover {
+background: var(--accent-hover);
+}
+
+.button.secondary {
+border: 1px solid var(--border);
+
+color: var(--text);
+
+background: var(--background-secondary);
+
+
+}
+
+.button.secondary:hover {
+background: #21262d;
+}
+
+/* ============================================================
+SECTIONS
+============================================================ */
+
+.section {
+max-width: 1000px;
+
+
+width: 100%;
+
+margin: auto;
+
+padding: 70px 24px;
+
+
+}
+
+.section h2 {
+font-size: 32px;
+
+
+margin-bottom: 18px;
+
+
+}
+
+.section > p {
+color: var(--text-secondary);
+
+
+max-width: 780px;
+
+
+}
+
+/* ============================================================
+CARDS
+============================================================ */
+
+.cards {
+display: grid;
+
+
+grid-template-columns:
+    repeat(4, 1fr);
+
+gap: 18px;
+
+margin-top: 35px;
+
+
+}
+
+.card {
+background: var(--background-secondary);
+
+
+border: 1px solid var(--border);
+
+border-radius: 12px;
+
+padding: 25px;
+
+transition:
+    transform 0.2s,
+    border-color 0.2s;
+
+
+}
+
+.card:hover {
+transform: translateY(-4px);
+
+
+border-color: #4b5563;
+
+
+}
+
+.icon {
+font-size: 30px;
+
+
+margin-bottom: 15px;
+
+
+}
+
+.card h3 {
+margin-bottom: 8px;
+
+
+font-size: 18px;
+
+
+}
+
+.card p {
+color: var(--text-secondary);
+
+
+font-size: 14px;
+
+
+}
+
+/* ============================================================
+LEGAL PAGES
+============================================================ */
+
+.legal-page {
+max-width: 850px;
+
+
+width: 100%;
+
+margin: auto;
+
+padding: 70px 24px 100px;
+
+
+}
+
+.legal-page h1 {
+font-size: clamp(38px, 6vw, 56px);
+
+
+line-height: 1.1;
+
+margin-bottom: 8px;
+
+
+}
+
+.last-update {
+color: var(--text-secondary);
+
+
+font-size: 14px;
+
+margin-bottom: 55px;
+
+
+}
+
+.legal-page h2 {
+font-size: 24px;
+
+
+margin-top: 42px;
+
+margin-bottom: 12px;
+
+
+}
+
+.legal-page p {
+color: var(--text-secondary);
+
+
+margin-bottom: 16px;
+
+
+}
+
+.legal-page ul {
+color: var(--text-secondary);
+
+
+padding-left: 25px;
+
+margin-bottom: 20px;
+
+
+}
+
+.text-link {
+color: #8ea1ff;
+
+
+text-decoration: none;
+
+font-weight: 600;
+
+
+}
+
+.text-link:hover {
+text-decoration: underline;
+}
+
+/* ============================================================
+FOOTER
+============================================================ */
+
+footer {
+margin-top: auto;
+
+
+border-top: 1px solid var(--border);
+
+padding: 30px 24px;
+
+text-align: center;
+
+color: var(--text-secondary);
+
+font-size: 14px;
+
+
+}
+
+.footer-links {
+display: flex;
+
+
+justify-content: center;
+
+gap: 20px;
+
+flex-wrap: wrap;
+
+margin-top: 10px;
+
+
+}
+
+.footer-links a {
+color: var(--text-secondary);
+
+
+text-decoration: none;
+
+
+}
+
+.footer-links a:hover {
+color: var(--text);
+}
+
+/* ============================================================
+MOBILE
+============================================================ */
+
+@media (max-width: 800px) {
+
+
+.nav-container {
+    flex-direction: column;
+}
+
+nav {
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 12px 18px;
+}
+
+.cards {
+    grid-template-columns:
+        repeat(2, 1fr);
+}
+
+
+}
+
+@media (max-width: 520px) {
+
+
+.hero {
+    min-height: 450px;
+
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    letter-spacing: -2px;
+}
+
+.hero p {
+    font-size: 16px;
+}
+
+.section {
+    padding: 50px 20px;
+}
+
+.cards {
+    grid-template-columns: 1fr;
+}
+
+.legal-page {
+    padding: 50px 20px 80px;
+}
+
+.legal-page h2 {
+    font-size: 21px;
+}
+
+
+}
