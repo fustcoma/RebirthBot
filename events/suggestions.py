@@ -1,3 +1,4 @@
+
 import sqlite3
 import time
 from pathlib import Path
@@ -270,6 +271,72 @@ def create_suggestion_embed(
 
 
 # ============================================================
+# CREAR TEXT INFORMATIU
+# ============================================================
+
+def create_suggestion_info_embed():
+
+    embed = discord.Embed(
+        color=SUGGESTION_COLOR
+    )
+
+    embed.description = (
+        "💡 **SUGERIMENTS**\n\n"
+
+        "Tens una idea per millorar "
+        "**RebirthMC Network**? Aquest és el lloc!\n\n"
+
+        "Escriu la teva proposta i serà publicada "
+        "aquí perquè la comunitat pugui votar-la.\n\n"
+
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+        "📝 **COM PROPOSAR UNA IDEA**\n\n"
+
+        "Utilitza **`/sugerencias`** i escriu la teva "
+        "proposta de manera clara.\n\n"
+
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+        "🗳️ **COM VOTAR**\n\n"
+
+        "👍 — **M'agrada / A favor**\n"
+        "👎 — **No m'agrada / En contra**\n\n"
+
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+        "📊 **ESTATS DELS SUGGERIMENTS**\n\n"
+
+        "⚪ **PENDENT** — Encara no ha estat revisat.\n\n"
+
+        "🟡 **EN CONSIDERACIÓ** — L'equip està "
+        "valorant la idea.\n\n"
+
+        "🟢 **ACCEPTAT** — La proposta ha estat acceptada.\n\n"
+
+        "🔴 **REBUTJAT** — La proposta ha estat rebutjada.\n\n"
+
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+        "⚠️ **IMPORTANT**\n\n"
+
+        "Intenta que els suggeriments siguin respectuosos, "
+        "útils i relacionats amb el servidor.\n\n"
+
+        "Els suggeriments poden ser revisats i modificats "
+        "d'estat per l'equip de moderació."
+    )
+
+    embed.set_footer(
+        text=(
+            "RebirthMC Network • Sistema de suggeriments"
+        )
+    )
+
+    return embed
+
+
+# ============================================================
 # ACTUALIZAR MENSAJE
 # ============================================================
 
@@ -357,33 +424,17 @@ class Suggestions(commands.Cog):
         message
     ):
 
-        # ----------------------------------------------------
-        # ¿SISTEMA ACTIVADO?
-        # ----------------------------------------------------
-
         if not SUGGESTIONS_ENABLED:
 
             return
-
-        # ----------------------------------------------------
-        # SOLO CANAL DE SUGERENCIAS
-        # ----------------------------------------------------
 
         if message.channel.id != SUGGESTIONS_CHANNEL_ID:
 
             return
 
-        # ----------------------------------------------------
-        # IGNORAR BOTS
-        # ----------------------------------------------------
-
         if message.author.bot:
 
             return
-
-        # ----------------------------------------------------
-        # BORRAR MENSAJE
-        # ----------------------------------------------------
 
         try:
 
@@ -412,10 +463,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # AVISAR AL USUARIO
-        # ----------------------------------------------------
-
         try:
 
             await message.author.send(
@@ -428,7 +475,6 @@ class Suggestions(commands.Cog):
 
         except discord.Forbidden:
 
-            # El usuario tiene los mensajes privados cerrados.
             pass
 
         except discord.HTTPException as error:
@@ -557,10 +603,6 @@ class Suggestions(commands.Cog):
             status
         ) = result
 
-        # ----------------------------------------------------
-        # CANAL
-        # ----------------------------------------------------
-
         channel = self.bot.get_channel(
             channel_id
         )
@@ -582,10 +624,6 @@ class Suggestions(commands.Cog):
 
                 return
 
-        # ----------------------------------------------------
-        # MENSAJE
-        # ----------------------------------------------------
-
         try:
 
             message = await channel.fetch_message(
@@ -605,19 +643,11 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # GUILD
-        # ----------------------------------------------------
-
         guild = message.guild
 
         if guild is None:
 
             return
-
-        # ----------------------------------------------------
-        # AUTOR
-        # ----------------------------------------------------
 
         member = guild.get_member(
             user_id
@@ -647,10 +677,6 @@ class Suggestions(commands.Cog):
                 member = MentionMember(
                     user_id
                 )
-
-        # ----------------------------------------------------
-        # ACTUALIZAR
-        # ----------------------------------------------------
 
         try:
 
@@ -690,17 +716,9 @@ class Suggestions(commands.Cog):
         sugerencia: str
     ):
 
-        # ----------------------------------------------------
-        # RESPONDER INMEDIATAMENTE
-        # ----------------------------------------------------
-
         await interaction.response.defer(
             ephemeral=True
         )
-
-        # ----------------------------------------------------
-        # ACTIVADO
-        # ----------------------------------------------------
 
         if not SUGGESTIONS_ENABLED:
 
@@ -711,10 +729,6 @@ class Suggestions(commands.Cog):
             )
 
             return
-
-        # ----------------------------------------------------
-        # TEXTO
-        # ----------------------------------------------------
 
         sugerencia = sugerencia.strip()
 
@@ -737,10 +751,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # GUILD
-        # ----------------------------------------------------
-
         if interaction.guild is None:
 
             await interaction.followup.send(
@@ -750,10 +760,6 @@ class Suggestions(commands.Cog):
             )
 
             return
-
-        # ----------------------------------------------------
-        # CANAL
-        # ----------------------------------------------------
 
         channel = self.bot.get_channel(
             SUGGESTIONS_CHANNEL_ID
@@ -781,10 +787,6 @@ class Suggestions(commands.Cog):
                 )
 
                 return
-
-        # ----------------------------------------------------
-        # CREAR REGISTRO
-        # ----------------------------------------------------
 
         try:
 
@@ -836,10 +838,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # EMBED
-        # ----------------------------------------------------
-
         embed = create_suggestion_embed(
             suggestion_id,
             interaction.user,
@@ -848,10 +846,6 @@ class Suggestions(commands.Cog):
             dislikes=0,
             status=STATUS_PENDING
         )
-
-        # ----------------------------------------------------
-        # PUBLICAR
-        # ----------------------------------------------------
 
         try:
 
@@ -890,10 +884,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # GUARDAR MESSAGE ID
-        # ----------------------------------------------------
-
         try:
 
             connection = get_connection()
@@ -921,10 +911,6 @@ class Suggestions(commands.Cog):
                 f"{error}"
             )
 
-        # ----------------------------------------------------
-        # AÑADIR REACCIONES
-        # ----------------------------------------------------
-
         try:
 
             await message.add_reaction(
@@ -949,14 +935,164 @@ class Suggestions(commands.Cog):
                 f"{error}"
             )
 
+        await interaction.followup.send(
+            f"✅ Tu sugerencia "
+            f"**#{suggestion_id}** se ha publicado en "
+            f"{channel.mention}.",
+            ephemeral=True
+        )
+
+
+    # ========================================================
+    # /SUGERENCIATEXT
+    #
+    # Publica el mensaje informativo del sistema
+    # de sugerencias en el canal configurado.
+    # Solo administradores.
+    # ========================================================
+
+    @app_commands.command(
+        name="sugerenciatext",
+        description="Publica el mensaje informativo de sugerencias."
+    )
+    @app_commands.default_permissions(
+        administrator=True
+    )
+    async def sugerenciatext(
+        self,
+        interaction: discord.Interaction
+    ):
+
+        await interaction.response.defer(
+            ephemeral=True
+        )
+
+        if not SUGGESTIONS_ENABLED:
+
+            await interaction.followup.send(
+                "❌ El sistema de sugerencias "
+                "está desactivado.",
+                ephemeral=True
+            )
+
+            return
+
+        if interaction.guild is None:
+
+            await interaction.followup.send(
+                "❌ Este comando solo "
+                "funciona dentro de un servidor.",
+                ephemeral=True
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # COMPROBAR ADMINISTRADOR
+        # ----------------------------------------------------
+
+        if not isinstance(
+            interaction.user,
+            discord.Member
+        ):
+
+            await interaction.followup.send(
+                "❌ No se ha podido comprobar "
+                "tus permisos.",
+                ephemeral=True
+            )
+
+            return
+
+        if not interaction.user.guild_permissions.administrator:
+
+            await interaction.followup.send(
+                "❌ Necesitas ser administrador "
+                "para utilizar este comando.",
+                ephemeral=True
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # BUSCAR CANAL
+        # ----------------------------------------------------
+
+        channel = self.bot.get_channel(
+            SUGGESTIONS_CHANNEL_ID
+        )
+
+        if channel is None:
+
+            try:
+
+                channel = await self.bot.fetch_channel(
+                    SUGGESTIONS_CHANNEL_ID
+                )
+
+            except Exception as error:
+
+                print(
+                    f"❌ No puedo obtener el canal "
+                    f"de sugerencias: {error}"
+                )
+
+                await interaction.followup.send(
+                    "❌ No he podido encontrar "
+                    "el canal de sugerencias.",
+                    ephemeral=True
+                )
+
+                return
+
+        # ----------------------------------------------------
+        # CREAR EMBED
+        # ----------------------------------------------------
+
+        embed = create_suggestion_info_embed()
+
+        # ----------------------------------------------------
+        # PUBLICAR
+        # ----------------------------------------------------
+
+        try:
+
+            await channel.send(
+                embed=embed
+            )
+
+        except discord.Forbidden:
+
+            await interaction.followup.send(
+                "❌ No tengo permisos para enviar "
+                "mensajes en el canal de sugerencias.",
+                ephemeral=True
+            )
+
+            return
+
+        except discord.HTTPException as error:
+
+            print(
+                f"❌ Error publicando el texto "
+                f"de sugerencias: {error}"
+            )
+
+            await interaction.followup.send(
+                "❌ No he podido publicar "
+                "el mensaje informativo.",
+                ephemeral=True
+            )
+
+            return
+
         # ----------------------------------------------------
         # CONFIRMACIÓN
         # ----------------------------------------------------
 
         await interaction.followup.send(
-            f"✅ Tu sugerencia "
-            f"**#{suggestion_id}** se ha publicado en "
-            f"{channel.mention}.",
+            f"✅ El mensaje informativo de sugerencias "
+            f"se ha publicado en {channel.mention}.",
             ephemeral=True
         )
 
@@ -1053,17 +1189,9 @@ class Suggestions(commands.Cog):
         new_status
     ):
 
-        # ----------------------------------------------------
-        # RESPONDER INMEDIATAMENTE
-        # ----------------------------------------------------
-
         await interaction.response.defer(
             ephemeral=True
         )
-
-        # ----------------------------------------------------
-        # GUILD
-        # ----------------------------------------------------
 
         if interaction.guild is None:
 
@@ -1074,10 +1202,6 @@ class Suggestions(commands.Cog):
             )
 
             return
-
-        # ----------------------------------------------------
-        # OBTENER SUGERENCIA
-        # ----------------------------------------------------
 
         suggestion = get_suggestion(
             suggestion_id
@@ -1104,10 +1228,6 @@ class Suggestions(commands.Cog):
             created_at
         ) = suggestion
 
-        # ----------------------------------------------------
-        # SERVIDOR
-        # ----------------------------------------------------
-
         if guild_id != interaction.guild.id:
 
             await interaction.followup.send(
@@ -1117,10 +1237,6 @@ class Suggestions(commands.Cog):
             )
 
             return
-
-        # ----------------------------------------------------
-        # CAMBIAR ESTADO
-        # ----------------------------------------------------
 
         success = set_status(
             suggestion_id,
@@ -1137,10 +1253,6 @@ class Suggestions(commands.Cog):
             )
 
             return
-
-        # ----------------------------------------------------
-        # CANAL
-        # ----------------------------------------------------
 
         channel = self.bot.get_channel(
             channel_id
@@ -1169,10 +1281,6 @@ class Suggestions(commands.Cog):
                 )
 
                 return
-
-        # ----------------------------------------------------
-        # MENSAJE
-        # ----------------------------------------------------
 
         try:
 
@@ -1205,10 +1313,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # AUTOR
-        # ----------------------------------------------------
-
         member = interaction.guild.get_member(
             user_id
         )
@@ -1238,10 +1342,6 @@ class Suggestions(commands.Cog):
                     user_id
                 )
 
-        # ----------------------------------------------------
-        # ACTUALIZAR EMBED
-        # ----------------------------------------------------
-
         try:
 
             await update_suggestion_message(
@@ -1268,10 +1368,6 @@ class Suggestions(commands.Cog):
 
             return
 
-        # ----------------------------------------------------
-        # CONFIRMACIÓN
-        # ----------------------------------------------------
-
         status_text, _ = get_status_data(
             new_status
         )
@@ -1295,3 +1391,4 @@ async def setup(
     await bot.add_cog(
         Suggestions(bot)
     )
+
