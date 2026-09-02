@@ -499,3 +499,17 @@ El `.gitignore` del projecte ja està configurat per ignorar aquests fitxers i c
 Especialment, **mai comparteixis el token del bot**.
 
 Si el token es fa públic accidentalment, genera'n un de nou immediatament des del Discord Developer Portal.
+
+## 📜 Llicència
+
+Aquest projecte està publicat sota la **llicència MIT**.
+
+## 👨‍💻 Autor
+
+Creat per **fustcoma**.
+
+🔗 **Repositori:** https://github.com/fustcoma/Escape-Room
+
+---
+
+⭐ Si t'ha agradat el projecte, pots donar-li una estrella al repositori!
